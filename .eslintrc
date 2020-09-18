@@ -4,17 +4,29 @@
     "eslint:recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:testing-library/recommended",
+    "plugin:testing-library/react"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "jsx-a11y",
     "prettier",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "testing-library"
   ],
   "rules": {},
   "overrides": [
     {
+      "settings": {
+        "react": {
+          "version": "detect"
+        },
+        "import/resolver": {
+          "typescript": {}
+        }
+      },
+      
       "files": [
         "**/*.ts?(x)"
       ],
