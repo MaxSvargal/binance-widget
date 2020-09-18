@@ -1,8 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import React, { FC } from 'react';
+
+import logo from './logo.svg';
+import { TickerWidget } from './tickerWidget';
+
+const App: FC = () => {
   return (
     <div className="App">
       <header className="App-header">
@@ -16,11 +19,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn Reactsss
         </a>
+        <TickerWidget />
       </header>
     </div>
   );
-}
+};
 
 export default App;
