@@ -187,6 +187,16 @@ describe('TickerWidget', () => {
     expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
   });
 
+  it('on click button clear search', async () => {
+    renderWidget(products);
+
+    await UserEvent.type(screen.getByRole('searchbox'), 'xrp');
+
+    UserEvent.click(screen.getByRole('button', { name: 'Clear' }));
+
+    expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
+  });
+
   it('change radio button to sort products by volume', () => {
     renderWidget(products);
 

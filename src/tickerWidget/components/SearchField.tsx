@@ -25,7 +25,7 @@ export const SearchField: FC<ISearchFieldProps> = ({ value, onChange }) => {
     setInnerValue(event.target.value);
   }, []);
 
-  const onClickClear = useCallback(() => onChange(''), [onChange]);
+  const onClickClear = useCallback(() => setInnerValue(''), [setInnerValue]);
 
   return (
     <div>
