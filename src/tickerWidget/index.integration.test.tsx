@@ -4,8 +4,10 @@ import { render, screen } from '@testing-library/react';
 import UserEvent from '@testing-library/user-event';
 
 import { TickerWidgetLayout } from './components/TickerWidgetLayout';
-import { ProductsContextProvider } from './contexts/productsContext';
+import { ProductsContextProvider } from './contexts/productsContexts';
 import { IProduct } from './interfaces/products';
+
+const DEFAULT_MARKET = { asset: 'BTC' };
 
 const products: IProduct[] = [
   {
@@ -110,16 +112,16 @@ const products: IProduct[] = [
   },
 ];
 
-const renderMarketsMenu = (products: IProduct[]) =>
+const renderWidget = (products: IProduct[]) =>
   render(
     <ProductsContextProvider value={products}>
-      <TickerWidgetLayout />
+      <TickerWidgetLayout defaultMarket={DEFAULT_MARKET} />
     </ProductsContextProvider>,
   );
 
 describe('TickerWidget', () => {
-  it('show products list on select one of ALTS markets', async () => {
-    renderMarketsMenu(products);
+  it('show products list on select one of ALTS markets', () => {
+    renderWidget(products);
 
     const ethBtn = screen.getByRole('button', { name: /ETH/i });
     expect(ethBtn).toBeInTheDocument();
@@ -128,19 +130,62 @@ describe('TickerWidget', () => {
 
     expect(screen.getByText('DASH/ETH')).toBeInTheDocument();
     expect(screen.getByText('ENG/ETH')).toBeInTheDocument();
+    expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
     expect(screen.queryByText('TRX/XRP')).not.toBeInTheDocument();
   });
 
-  it('show products list on select all ALTS markets', async () => {
-    renderMarketsMenu(products);
+  it('show products list on select all ALTS markets', () => {
+    renderWidget(products);
 
     const altsBtn = screen.getByRole('button', { name: /ALTS/i });
     expect(altsBtn).toBeInTheDocument();
 
     UserEvent.click(altsBtn);
 
+    expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
     expect(screen.getByText('DASH/ETH')).toBeInTheDocument();
     expect(screen.getByText('ENG/ETH')).toBeInTheDocument();
     expect(screen.getByText('TRX/XRP')).toBeInTheDocument();
   });
+
+  it('show filtered list on search', async () => {
+    renderWidget(products);
+
+    await UserEvent.type(screen.getByRole('searchbox'), 'xrp');
+
+    expect(screen.getByRole('searchbox')).toHaveValue('xrp');
+
+    await screen.findByText('TRX/XRP');
+
+    expect(screen.queryByText('DASH/ETH')).not.toBeInTheDocument();
+    expect(screen.queryByText('ENG/ETH')).not.toBeInTheDocument();
+    expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
+  });
+
+  it('change radio button to sort products by volume', () => {
+    renderWidget(products);
+
+    expect(screen.getByRole('row', { name: 'Change' })).toBeInTheDocument();
+
+    UserEvent.click(screen.getByLabelText('Volume', { selector: 'input' }));
+
+    expect(screen.getByRole('row', { name: 'Volume' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('row', { name: 'Change' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('change radio button to sort products by change back', () => {
+    renderWidget(products);
+    UserEvent.click(screen.getByLabelText('Volume', { selector: 'input' }));
+    UserEvent.click(screen.getByLabelText('Change', { selector: 'input' }));
+
+    expect(screen.getByRole('row', { name: 'Change' })).toBeInTheDocument();
+  });
+
+  it.todo('columns sort products by name');
+  it.todo('columns sort products by price');
+
+  it.todo('columns sort products by change');
+  it.todo('columns sort products by volume');
 });

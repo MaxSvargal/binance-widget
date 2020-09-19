@@ -1,31 +1,19 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 
-import { productsContext } from '../contexts/productsContext';
-import { useSelectProductsByMarket } from '../hooks/useSelectProductsByMarket';
-import { useSelectProductsByParent } from '../hooks/useSelectProductsByParent';
-import { IActiveMarketState } from './TickerWidgetLayout';
+import { IProduct } from '../interfaces/products';
 
 interface IProductsTableProps {
-  market: IActiveMarketState;
+  values: IProduct[];
 }
 
-export const ProductsTable: FC<IProductsTableProps> = ({ market }) => {
-  const [products] = useContext(productsContext);
-
-  // const altsProducts = useSelectProductsByMarket(products, market.asset);
-  // const parentProducts = useSelectProductsByParent(products, market.group);
-  const values = useSelectProductsByMarket(products, market);
-
-  console.log({ market, values });
-  return (
-    <div>
-      {values.map((product) => (
-        <div key={product.s}>
-          <span>
-            {product.b}/{product.q}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-};
+export const ProductsTable: FC<IProductsTableProps> = ({ values }) => (
+  <div>
+    {values.map((product) => (
+      <div key={product.s}>
+        <span>
+          {product.b}/{product.q}
+        </span>
+      </div>
+    ))}
+  </div>
+);

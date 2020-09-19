@@ -5,10 +5,27 @@ import { TickerWidgetLayout } from './components/TickerWidgetLayout';
 import {
   ProductsContextProvider,
   TickerContextProvider,
-} from './contexts/productsContext';
+} from './contexts/productsContexts';
+
+export enum SortBy {
+  ChangeAsc = 'ChangeAsc',
+  ChangeDesc = 'ChangeDesc',
+  VolumeAsc = 'VolumeAsc',
+  VolumeDesc = 'VolumeDesc',
+  PairAsc = 'PairAsc',
+  PairDesc = 'PairDesc',
+  PriceAsc = 'PriceAsc',
+  PriceDesc = 'PriceDesc',
+}
+
+export interface IActiveMarketState {
+  // shape
+  asset?: string;
+  group?: string;
+}
 
 export const TickerWidget: FC = () => (
   <Compose components={[ProductsContextProvider, TickerContextProvider]}>
-    <TickerWidgetLayout />
+    <TickerWidgetLayout defaultMarket={{ asset: 'BTC' }} />
   </Compose>
 );
