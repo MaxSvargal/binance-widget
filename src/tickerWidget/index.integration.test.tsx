@@ -145,7 +145,7 @@ const renderWidget = (products: IProduct[]) =>
   );
 
 describe('TickerWidget', () => {
-  it.skip('show products list on select one of ALTS markets', () => {
+  it('show products list on select one of ALTS markets', () => {
     renderWidget(products);
 
     const ethBtn = screen.getByRole('button', { name: /ETH/i });
@@ -159,7 +159,7 @@ describe('TickerWidget', () => {
     expect(screen.queryByText('TRX/XRP')).not.toBeInTheDocument();
   });
 
-  it.skip('show products list on select all ALTS markets', () => {
+  it('show products list on select all ALTS markets', () => {
     renderWidget(products);
 
     const altsBtn = screen.getByRole('button', { name: /ALTS/i });
@@ -173,7 +173,7 @@ describe('TickerWidget', () => {
     expect(screen.getByText('TRX/XRP')).toBeInTheDocument();
   });
 
-  it.skip('show filtered list on search', async () => {
+  it('show filtered list on search', async () => {
     renderWidget(products);
 
     await UserEvent.type(screen.getByRole('searchbox'), 'xrp');
