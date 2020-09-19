@@ -19,7 +19,7 @@ export interface IProduct {
   as: number;
   pm: string;
   pn: string;
-  cs: number;
+  cs: number | null;
   tags: string[];
   etf: boolean;
 }

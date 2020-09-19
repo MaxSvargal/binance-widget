@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
-import { IActiveMarketState, SortBy } from '..';
+import { IActiveMarketState, SortBy, SortByRadioGroup } from '..';
 
 import { productsContext } from '../contexts/productsContexts';
 import { useSelectProductsByMarket } from '../hooks/useSelectProductsByMarket';
@@ -28,7 +28,22 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
 
   const [searchValue, setSearchValue] = useState('');
 
-  const [activeSortBy, setActiveSortBy] = useState<SortBy>(SortBy.ChangeAsc);
+  const [activeSortBy, setActiveSortBy] = useState(SortBy.ChangeAsc);
+
+  const [activeSortButton, setActiveSortButton] = useState(
+    SortByRadioGroup.Change,
+  );
+
+  const onChangeSortButton = useCallback((value: SortByRadioGroup) => {
+    setActiveSortButton(value);
+
+    switch (value) {
+      case SortByRadioGroup.Volume:
+        return setActiveSortBy(SortBy.VolumeAsc);
+      default:
+        return setActiveSortBy(SortBy.ChangeAsc);
+    }
+  }, []);
 
   const [findedProducts, setFindedProducts] = useState<IProduct[]>([]);
 
@@ -71,11 +86,19 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
     <>
       <MarketsMenu onChange={onChangeMarket} />
       <div>
-        <SearchField onChange={onSearch} value={searchValue} />
-        <SortByRadio onChange={onChangeSort} />
+        <SearchField value={searchValue} onChange={onSearch} />
+        <SortByRadio value={activeSortButton} onChange={onChangeSortButton} />
       </div>
-      <SortByColumn sortBy={activeSortBy} />
-      <ProductsTable values={productsValues} />
+      <SortByColumn
+        sortBy={activeSortBy}
+        extraColumn={activeSortButton}
+        onChange={onChangeSort}
+      />
+      <ProductsTable
+        values={productsValues}
+        sortBy={activeSortBy}
+        extraColumn={activeSortButton}
+      />
     </>
   );
 };

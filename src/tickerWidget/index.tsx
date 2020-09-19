@@ -18,6 +18,11 @@ export enum SortBy {
   PriceDesc = 'PriceDesc',
 }
 
+export enum SortByRadioGroup {
+  Change = 'Change',
+  Volume = 'Volume',
+}
+
 export interface IActiveMarketState {
   // shape
   asset?: string;

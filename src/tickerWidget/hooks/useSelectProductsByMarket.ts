@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { IActiveMarketState } from '../components/TickerWidgetLayout';
+import { IActiveMarketState } from '..';
 import { IProduct } from '../interfaces/products';
 
 export const useSelectProductsByMarket = (
