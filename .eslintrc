@@ -6,10 +6,12 @@
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:testing-library/recommended",
-    "plugin:testing-library/react"
+    "plugin:testing-library/react",
+    "plugin:react/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
+    "react",
     "jsx-a11y",
     "prettier",
     "@typescript-eslint",
@@ -31,6 +33,9 @@
         "**/*.ts?(x)"
       ],
       "rules": {
+        "react/prop-types": "off",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": "off",
         "prettier/prettier": [
           "error",
           {
