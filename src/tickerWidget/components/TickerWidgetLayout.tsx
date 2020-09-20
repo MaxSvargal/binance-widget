@@ -28,7 +28,7 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
 
   const [searchValue, setSearchValue] = useState('');
 
-  const [activeSortBy, setActiveSortBy] = useState(SortBy.ChangeAsc);
+  const [activeSortBy, setActiveSortBy] = useState(SortBy.ChangeDesc);
 
   const [activeSortButton, setActiveSortButton] = useState(
     SortByRadioGroup.Change,
@@ -39,9 +39,9 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
 
     switch (value) {
       case SortByRadioGroup.Volume:
-        return setActiveSortBy(SortBy.VolumeAsc);
+        return setActiveSortBy(SortBy.VolumeDesc);
       default:
-        return setActiveSortBy(SortBy.ChangeAsc);
+        return setActiveSortBy(SortBy.VolumeDesc);
     }
   }, []);
 
