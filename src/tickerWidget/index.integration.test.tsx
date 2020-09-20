@@ -1,4 +1,5 @@
 import React from 'react';
+import { mocked } from 'ts-jest/utils';
 
 import { render, screen } from '@testing-library/react';
 import UserEvent from '@testing-library/user-event';
@@ -6,6 +7,17 @@ import UserEvent from '@testing-library/user-event';
 import { TickerWidgetLayout } from './components/TickerWidgetLayout';
 import { ProductsContextProvider } from './contexts/productsContexts';
 import { IProduct } from './interfaces/products';
+
+import { getProducts } from './repos/binanceRepo';
+import { BinanceSocketRepo } from './repos/binanceSocketRepo';
+
+jest.mock('./repos/binanceRepo');
+jest.mock('./repos/binanceSocketRepo');
+
+const mockedGetProducts = mocked(getProducts, true);
+const mockedBinanceSocketRepo = mocked(BinanceSocketRepo, true);
+const mockedOnMiniTickerShorten = mockedBinanceSocketRepo.mock.instances[0]
+  .onMiniTickerShorten as jest.Mock;
 
 const DEFAULT_MARKET = { asset: 'BTC' };
 
@@ -137,6 +149,31 @@ const products: IProduct[] = [
   },
 ];
 
+const tickerData = [
+  {
+    e: '24hrMiniTicker',
+    E: 1600619759229,
+    s: 'BNBBTC',
+    c: '0.03400200',
+    o: '0.03478600',
+    h: '0.03495000',
+    l: '0.03388300',
+    v: '250983.25500000',
+    q: '8684.11973573',
+  },
+  {
+    e: '24hrMiniTicker',
+    E: 1600619759321,
+    s: 'UMABTC',
+    c: '0.00001136',
+    o: '0.00001051',
+    h: '0.00001435',
+    l: '0.00001051',
+    v: '24772060.00000000',
+    q: '304.35494788',
+  },
+];
+
 const renderWidget = (products: IProduct[]) =>
   render(
     <ProductsContextProvider value={products}>
@@ -145,11 +182,46 @@ const renderWidget = (products: IProduct[]) =>
   );
 
 describe('TickerWidget', () => {
+  // window.fetch = fetchMock;
+
+  beforeEach(() => {
+    mockedGetProducts.mockReset();
+    mockedOnMiniTickerShorten.mockReset();
+
+    mockedGetProducts.mockResolvedValueOnce(products);
+    mockedOnMiniTickerShorten.mockImplementationOnce((listener) => {
+      listener(tickerData);
+      // return tickerMessage;
+    });
+  });
+
+  it('show default market on load', () => {
+    renderWidget(products);
+
+    expect(mockedGetProducts).toHaveBeenCalledTimes(1);
+    // expect(fetchMock.mock.calls[0][0]).toEqual('https://google.com');
+
+    expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
+    expect(screen.queryByText('ENG/ETH')).not.toBeInTheDocument();
+    expect(screen.queryByText('DASH/ETH')).not.toBeInTheDocument();
+    expect(screen.queryByText('TRX/XRP')).not.toBeInTheDocument();
+  });
+
+  it('update products on websocket event', async () => {
+    renderWidget(products);
+
+    expect(mockedOnMiniTickerShorten).toHaveBeenCalledTimes(1);
+
+    expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
+    expect(screen.getByText('0.034002')).toBeInTheDocument();
+    expect(screen.getByText('UMA/BTC')).toBeInTheDocument();
+    expect(screen.getByText('0.00001136')).toBeInTheDocument();
+  });
+
   it('show products list on select one of ALTS markets', () => {
     renderWidget(products);
 
     const ethBtn = screen.getByRole('button', { name: /ETH/i });
-    expect(ethBtn).toBeInTheDocument();
 
     UserEvent.click(ethBtn);
 
@@ -163,7 +235,6 @@ describe('TickerWidget', () => {
     renderWidget(products);
 
     const altsBtn = screen.getByRole('button', { name: /ALTS/i });
-    expect(altsBtn).toBeInTheDocument();
 
     UserEvent.click(altsBtn);
 
@@ -197,7 +268,7 @@ describe('TickerWidget', () => {
     expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
   });
 
-  it('change radio button to sort products by volume', () => {
+  it('on change radio button to sort products by volume', () => {
     renderWidget(products);
 
     const getRadioEl = (name: string) => screen.getByRole('radio', { name });
@@ -205,19 +276,19 @@ describe('TickerWidget', () => {
     expect(getRadioEl('Change')).toHaveProperty('checked', true);
     expect(getRadioEl('Volume')).toHaveProperty('checked', false);
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
 
     UserEvent.click(screen.getByLabelText('Volume', { selector: 'input' }));
 
     expect(getRadioEl('Change')).toHaveProperty('checked', false);
     expect(getRadioEl('Volume')).toHaveProperty('checked', true);
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
   });
 
-  it('change radio button to sort products by change back', () => {
+  it('on change radio button to sort products by change back', () => {
     renderWidget(products);
 
     UserEvent.click(screen.getByLabelText('Volume', { selector: 'input' }));
@@ -229,23 +300,24 @@ describe('TickerWidget', () => {
     );
   });
 
-  it('columns sort products by name (pair)', () => {
+  it('on sort by colum by name (pair)', () => {
     renderWidget(products);
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
 
-    UserEvent.click(screen.getByRole('button', { name: 'Pair' }));
+    UserEvent.click(screen.getByRole('button', { name: 'Pair' })); // desc
+    UserEvent.click(screen.getByRole('button', { name: 'Pair' })); // ask
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
   });
 
-  it('columns sort products by price', () => {
+  it('on sort by colum by price', () => {
     renderWidget(products);
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
 
     UserEvent.click(screen.getByRole('button', { name: 'Last Price' }));
 
@@ -258,13 +330,8 @@ describe('TickerWidget', () => {
     expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
   });
 
-  it('columns sort products by change', () => {
+  it('con sort by colum by change', () => {
     renderWidget(products);
-
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
-
-    UserEvent.click(screen.getByRole('button', { name: 'Change' }));
 
     expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
     expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
@@ -273,18 +340,24 @@ describe('TickerWidget', () => {
 
     expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
     expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
+
+    UserEvent.click(screen.getByRole('button', { name: 'Change' }));
+
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
   });
-  it('columns sort products by volume', () => {
+
+  it('on sort by colum by volume', () => {
     renderWidget(products);
 
     UserEvent.click(screen.getByLabelText('Volume', { selector: 'input' }));
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
 
     UserEvent.click(screen.getByRole('button', { name: 'Volume' }));
 
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('BNB/BTC');
-    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
   });
 });
