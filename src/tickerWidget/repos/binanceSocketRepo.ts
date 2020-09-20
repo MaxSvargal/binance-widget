@@ -1,50 +1,24 @@
-import { EventEmitter, Listener } from '../../shared/core/EventEmitter';
+import { WebSocketRepo } from '../../shared/repos/WebSocketRepo';
+import { IMiniTicker, IMiniTickerShorten } from '../interfaces/ticker';
 
-interface IBinanceSocketRepoEvents {
-  on(eventName: 'tick', cb: Listener): void;
-}
-
-export class BinanceSocketRepo
-  extends EventEmitter
-  implements IBinanceSocketRepoEvents {
-  socket: WebSocket;
-
-  constructor(private path: string) {
-    super();
-    this.socket = new WebSocket(path);
-    this.subscribe();
+export class BinanceSocketRepo extends WebSocketRepo {
+  constructor() {
+    super('wss://stream.binance.com/stream?streams=!miniTicker@arr');
   }
 
-  private subscribe() {
-    this.socket.addEventListener('open', function () {
-      this.send(
-        JSON.stringify({
-          method: 'subscribe',
-          topic: 'allMiniTickers',
-          symbols: ['$all'],
-        }),
-      );
-    });
-
-    this.socket.addEventListener('message', function (event) {
-      console.log('Message from server ', event.data);
-    });
-  }
-
-  public on(event: 'tick', listener: Listener): () => void {
-    return super.on(event, listener);
-  }
-
-  public close(): void {
-    this.socket.close();
-  }
-
-  public retry(): void {
-    this.socket = new WebSocket(this.path);
+  public onMiniTickerShorten(
+    listener: (data: IMiniTickerShorten[]) => void,
+  ): () => void {
+    return this.on('!miniTicker@arr', (data: IMiniTicker[]) =>
+      listener(
+        data.map((v) => ({
+          // Optimize memory usage
+          s: v.s,
+          c: v.c,
+          o: v.o,
+          v: v.v,
+        })),
+      ),
+    );
   }
 }
-
-const b = new BinanceSocketRepo(
-  'wss://stream.binance.com/stream?streams=!miniTicker@arr',
-);
-b.on('tick', (resp) => console.log(resp));

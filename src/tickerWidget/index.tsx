@@ -7,6 +7,8 @@ import {
   TickerContextProvider,
 } from './contexts/productsContexts';
 
+import { BinanceSocketRepo } from './repos/binanceSocketRepo';
+
 export enum SortBy {
   ChangeAsc = 'ChangeAsc',
   ChangeDesc = 'ChangeDesc',
@@ -34,3 +36,5 @@ export const TickerWidget: FC = () => (
     <TickerWidgetLayout defaultMarket={{ asset: 'BTC' }} />
   </Compose>
 );
+
+export const binanceSocketRepo = new BinanceSocketRepo();

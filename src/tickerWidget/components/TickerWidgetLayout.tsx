@@ -62,19 +62,13 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   }, [searchValue]);
 
   useEffect(() => {
-    console.log('effect');
     getProducts()
-      .then((p) => {
-        console.log({ p });
-        setProducts(p);
-      })
+      .then(setProducts)
       .catch((err) => {
         console.error({ err });
         /* setError() */
       });
   }, [setProducts]);
-
-  // console.log({ searchValue, findedProducts });
 
   const onChangeSort = useCallback((value: SortBy) => {
     setActiveSortBy(value);

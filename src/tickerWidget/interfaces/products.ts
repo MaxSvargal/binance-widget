@@ -29,20 +29,3 @@ export interface iGetProductsResponse {
   messageDetail: null;
   data: Array<IProduct>;
 }
-
-export interface IMiniTickerStream {
-  stream: string;
-  data: Array<IMiniTicker>;
-}
-
-export interface IMiniTicker {
-  e: '24hrMiniTicker';
-  E: number;
-  s: string;
-  c: string;
-  o: string;
-  h: string;
-  l: string;
-  v: string;
-  q: string;
-}
