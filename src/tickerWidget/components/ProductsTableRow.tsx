@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { numberPrettify } from '../../shared/helpers/numbers';
 
 import { IProduct } from '../interfaces/products';
 
@@ -12,7 +13,7 @@ export const ProductsTableRow: FC<IProps> = ({ value, extra }) => (
     <div role="cell">
       {value.b}/{value.q}
     </div>
-    <div style={{ padding: '0 1rem' }}>{value.c}</div>
+    <div style={{ padding: '0 1rem' }}>{numberPrettify(value.c)}</div>
     <div>{extra}</div>
   </div>
 );

@@ -9,7 +9,7 @@ export class BinanceSocketRepo extends WebSocketRepo {
   public onMiniTickerShorten(
     listener: (data: IMiniTickerShorten[]) => void,
   ): () => void {
-    return this.on('!miniTicker@arr', (data: IMiniTicker[]) =>
+    return this.on('!miniTicker@arr', (data: IMiniTicker[]) => {
       listener(
         data.map((v) => ({
           // Optimize memory usage
@@ -18,7 +18,7 @@ export class BinanceSocketRepo extends WebSocketRepo {
           o: v.o,
           v: v.v,
         })),
-      ),
-    );
+      );
+    });
   }
 }
