@@ -24,7 +24,6 @@ export class WebSocketRepo extends EventEmitter {
     this.socket.onmessage = (event) => {
       try {
         const json = JSON.parse(event.data);
-        this.emit('message');
         this.emit(json.stream, json.data);
       } catch (err) {
         this.emit('error', { detail: 'WebSocket JSON parse error' });
@@ -37,7 +36,7 @@ export class WebSocketRepo extends EventEmitter {
     };
 
     this.socket.onclose = (e) => {
-      console.log('connection closed', e.code, e.reason);
+      console.log('Connection closed', e.code, e.reason);
       this.emit('close', { detail: e });
     };
   }
