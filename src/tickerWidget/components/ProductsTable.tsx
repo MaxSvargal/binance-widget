@@ -60,6 +60,7 @@ export const ProductsTable: FC<IProductsTableProps> = ({
               ? getChangePerc(product, tickersMap)
               : getVolumeValue(product, tickersMap)
           }
+          showPercent={extraColumn === SortByRadioGroup.Change}
           onFavorite={onToggleFavorite(product.s)}
           isFavorite={favoritesSymbols.includes(product.s)}
         />
