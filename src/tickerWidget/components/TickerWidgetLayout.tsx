@@ -10,7 +10,7 @@ import { getProducts } from '../repos/binanceRepo';
 import { ConnectToggleBtn } from './ConnectToggleBtn';
 import { ErrorConnection } from './ErrorConnection';
 import { MarketsMenu } from './MarketsMenu';
-import { ProductsTable } from './productsTable/ProductsTable';
+import { ProductsTable } from './ProductsTable';
 import { SearchField } from './SearchField';
 import { SortByColumn } from './SortByColumn';
 import { SortByRadio } from './SortByRadio';
