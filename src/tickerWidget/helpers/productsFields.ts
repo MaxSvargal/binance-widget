@@ -28,8 +28,8 @@ export const getChangePerc = getProductField(
 );
 
 export const getVolumeValue = getProductField(
-  (product) => product.v.toFixed(2),
-  (ticker) => ticker.v,
+  (product) => product.v.toFixed(0),
+  (ticker) => parseInt(ticker.v).toString(),
 );
 
 export const getLastPrice = getProductField(
