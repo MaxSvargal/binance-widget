@@ -13,6 +13,7 @@ import { BinanceSocketRepo } from './repos/binanceSocketRepo';
 
 import products from './fixtures/products.json';
 import ticker from './fixtures/ticker.json';
+import { WebsocketReadyState } from '../shared/repos/WebSocketRepo';
 
 // Mock repos instead of fetch/ws api because it's simpler, clearer and have no dependencies
 jest.mock('./repos/binanceRepo');
@@ -23,6 +24,8 @@ const mockedGetProducts = mocked(getProducts, true);
 const mockedBinanceSocketRepo = mocked(BinanceSocketRepo, true);
 const mockedOnMiniTickerShorten = mockedBinanceSocketRepo.mock.instances[0]
   .onMiniTickerShorten as jest.Mock;
+const mockedOnChangeStatus = mockedBinanceSocketRepo.mock.instances[0]
+  .onChangeStatus as jest.Mock;
 
 describe('Ticker Widget', () => {
   const DEFAULT_MARKET = { asset: 'BTC' };
@@ -37,23 +40,16 @@ describe('Ticker Widget', () => {
   const setItemLocalStorageSpy = jest.spyOn(window.localStorage, 'setItem');
 
   beforeEach(() => {
-    mockedGetProducts.mockReset();
-    mockedOnMiniTickerShorten.mockReset();
+    mockedGetProducts.mockClear();
+    mockedOnMiniTickerShorten.mockClear();
 
     mockedGetProducts.mockResolvedValueOnce(products);
+    mockedGetProducts.mockRejectedValue('Fetch error');
     mockedOnMiniTickerShorten.mockImplementationOnce((listener) =>
       listener(ticker),
     );
 
     setItemLocalStorageSpy.mockClear();
-  });
-
-  it.skip('show error message if connection is broken', () => {
-    mockedGetProducts.mockReset();
-    mockedGetProducts.mockRejectedValue('Fetch error');
-    renderWidget(products);
-
-    expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
   });
 
   it('show default market on load', () => {
@@ -261,5 +257,49 @@ describe('Ticker Widget', () => {
     UserEvent.click(screen.getByRole('button', { name: 'Favorite' }));
     expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
     expect(screen.getAllByRole('cell')[1]).toHaveTextContent('TRX/XRP');
+  });
+
+  it('show default connected status', () => {
+    renderWidget(products);
+    UserEvent.click(screen.getByRole('button', { name: 'Connecting...' }));
+  });
+
+  it('on click on disconnect button then stop updates', () => {
+    mockedOnChangeStatus.mockImplementationOnce((listener) =>
+      listener(WebsocketReadyState.OPEN),
+    );
+    renderWidget(products);
+
+    UserEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
+
+    expect(
+      screen.getByRole('button', { name: 'Disconnecting...' }),
+    ).toBeInTheDocument();
+  });
+
+  it('on click on connect button then start updates', async () => {
+    mockedOnChangeStatus.mockImplementationOnce((listener) => {
+      listener(WebsocketReadyState.CLOSED);
+      setTimeout(() => listener(WebsocketReadyState.OPEN), 10);
+    });
+
+    renderWidget(products);
+
+    UserEvent.click(screen.getByRole('button', { name: 'Connect' }));
+
+    expect(
+      await screen.findByRole('button', { name: 'Disconnect' }),
+    ).toBeInTheDocument();
+  });
+
+  it.skip('show error message if products request is broken', () => {
+    mockedGetProducts.mockClear();
+    mockedGetProducts.mockRejectedValueOnce('Fetch error');
+    renderWidget([]);
+
+    console.log(mockedGetProducts);
+
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
   });
 });

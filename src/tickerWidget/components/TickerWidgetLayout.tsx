@@ -3,6 +3,8 @@ import { IActiveMarketState, SortBy, SortByRadioGroup } from '..';
 
 import { productsContext } from '../contexts/productsContexts';
 import { getProducts } from '../repos/binanceRepo';
+import { ConnectToggleBtn } from './ConnectToggleBtn';
+import { ErrorConnection } from './ErrorConnection';
 import { MarketsMenu } from './MarketsMenu';
 import { ProductsTable } from './productsTable/ProductsTable';
 import { SearchField } from './SearchField';
@@ -16,6 +18,7 @@ interface ITickerWidgetLayoutProps {
 export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   defaultMarket,
 }) => {
+  const [error, setError] = useState<Error | undefined>();
   const [, setProducts] = useContext(productsContext);
 
   const [activeMarket, setActiveMarket] = useState<IActiveMarketState>(
@@ -46,12 +49,7 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   const onSearch = useCallback((value: string) => setSearchValue(value), []);
 
   useEffect(() => {
-    getProducts()
-      .then(setProducts)
-      .catch((err) => {
-        console.error({ err });
-        /* setError() */
-      });
+    getProducts().then(setProducts).catch(setError);
   }, [setProducts]);
 
   const onChangeSort = useCallback((value: SortBy) => {
@@ -66,7 +64,9 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
     setIsActiveFavorite(false);
   }, [activeMarket]);
 
-  return (
+  return error ? (
+    <ErrorConnection />
+  ) : (
     <>
       <MarketsMenu
         onChange={onChangeMarket}
@@ -88,6 +88,9 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
         extraColumn={activeSortButton}
         activeMarket={activeMarket}
       />
+      <div style={{ position: 'absolute', top: 0, left: 0 }}>
+        <ConnectToggleBtn />
+      </div>
     </>
   );
 };
