@@ -6,11 +6,9 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;
 }
 
-export const MarketButton: FC<IProps> = (props) => (
+export const MarketButton: FC<IProps> = ({ active, ...rest }) => (
   <button
-    className={`${styles.marketButton} ${props.active && styles.active}`}
-    {...props}
-  >
-    {props.children}
-  </button>
+    className={`${styles.marketButton} ${active && styles.active}`}
+    {...rest}
+  />
 );

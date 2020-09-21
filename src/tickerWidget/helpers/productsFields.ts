@@ -4,7 +4,7 @@ import { IMiniTickerShorten } from '../interfaces/ticker';
 
 // move to components
 
-export const getPerc = (x: number, y: number): number => ((y - x) / x) * 100;
+export const getRatio = (x: number, y: number): number => ((y - x) / x) * 100;
 
 export const getProductField = (
   left: (product: IProduct) => string,
@@ -22,9 +22,9 @@ export const getProductField = (
   }
 };
 
-export const getChangePerc = getProductField(
-  (product) => getPerc(product.o, product.c).toFixed(2),
-  (ticker) => getPerc(parseFloat(ticker.o), parseFloat(ticker.c)).toFixed(2),
+export const getChangeRatio = getProductField(
+  (product) => getRatio(product.o, product.c).toFixed(2),
+  (ticker) => getRatio(parseFloat(ticker.o), parseFloat(ticker.c)).toFixed(2),
 );
 
 export const getVolumeValue = getProductField(

@@ -3,7 +3,7 @@ import React, { FC, useContext } from 'react';
 import { IActiveMarketState, SortBy, SortByRadioGroup } from '..';
 import { productsContext } from '../contexts/productsContexts';
 import {
-  getChangePerc,
+  getChangeRatio,
   getLastPrice,
   getVolumeValue,
 } from '../helpers/productsFields';
@@ -57,7 +57,7 @@ export const ProductsTable: FC<IProductsTableProps> = ({
           price={getLastPrice(product, tickersMap)}
           extra={
             extraColumn === SortByRadioGroup.Change
-              ? getChangePerc(product, tickersMap)
+              ? getChangeRatio(product, tickersMap)
               : getVolumeValue(product, tickersMap)
           }
           showPercent={extraColumn === SortByRadioGroup.Change}

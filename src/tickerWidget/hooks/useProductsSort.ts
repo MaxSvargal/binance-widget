@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 
 import { SortBy } from '../';
+import { getRatio } from '../helpers/productsFields';
 import { IProduct } from '../interfaces/products';
-
-export const getPerc = (x: number, y: number): number => ((y - x) / x) * 100;
 
 const orderOf = <T extends string | number>(a: T, b: T): number =>
   a > b ? 1 : b > a ? -1 : 0;
@@ -12,7 +11,7 @@ const bySymbol = (a: IProduct, b: IProduct) => orderOf(a.s, b.s);
 const byVolume = (a: IProduct, b: IProduct) => orderOf(a.v, b.v);
 const byPrice = (a: IProduct, b: IProduct) => orderOf(a.c, b.c);
 const byChange = (a: IProduct, b: IProduct) =>
-  orderOf(getPerc(a.o, a.c), getPerc(b.o, b.c));
+  orderOf(getRatio(a.o, a.c), getRatio(b.o, b.c));
 
 export const useProductsSort = <T extends IProduct[]>(
   values: T,
