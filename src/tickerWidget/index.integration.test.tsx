@@ -11,195 +11,55 @@ import { IProduct } from './interfaces/products';
 import { getProducts } from './repos/binanceRepo';
 import { BinanceSocketRepo } from './repos/binanceSocketRepo';
 
+import products from './fixtures/products.json';
+import ticker from './fixtures/ticker.json';
+
+// Mock repos instead of fetch/ws api because it's simpler, clearer and have no dependencies
 jest.mock('./repos/binanceRepo');
 jest.mock('./repos/binanceSocketRepo');
 
+// We use only public interfaces
 const mockedGetProducts = mocked(getProducts, true);
 const mockedBinanceSocketRepo = mocked(BinanceSocketRepo, true);
 const mockedOnMiniTickerShorten = mockedBinanceSocketRepo.mock.instances[0]
   .onMiniTickerShorten as jest.Mock;
 
-const DEFAULT_MARKET = { asset: 'BTC' };
+describe('Ticker Widget', () => {
+  const DEFAULT_MARKET = { asset: 'BTC' };
 
-const products: IProduct[] = [
-  {
-    s: 'BNBBTC',
-    st: 'TRADING',
-    b: 'BNB',
-    q: 'BTC',
-    ba: '',
-    qa: '฿',
-    i: 0.01,
-    ts: 1e-7,
-    an: 'BNB',
-    qn: 'Bitcoin',
-    o: 0.0026603,
-    h: 0.0026816,
-    l: 0.00242,
-    c: 0.0025694,
-    v: 2183898.71,
-    qv: 5519.73442977,
-    y: 0,
-    as: 2183898.71,
-    pm: 'BTC',
-    pn: 'BTC',
-    cs: 152665937,
-    tags: [],
-    etf: false,
-  },
-  {
-    s: 'UMABTC',
-    st: 'TRADING',
-    b: 'UMA',
-    q: 'BTC',
-    ba: '',
-    qa: '฿',
-    i: 0.001,
-    ts: 0.000001,
-    an: 'UMA',
-    qn: 'Bitcoin',
-    o: 0.001543,
-    h: 0.001627,
-    l: 0.000823,
-    c: 1.001389,
-    v: 95411.25,
-    qv: 140.79671292,
-    y: 0,
-    as: 95411.25,
-    pm: 'BTC',
-    pn: 'BTC',
-    cs: null,
-    tags: ['defi', 'mining-zone'],
-    etf: false,
-  },
-  {
-    s: 'DASHETH',
-    st: 'TRADING',
-    b: 'DASH',
-    q: 'ETH',
-    ba: '',
-    qa: 'Ξ',
-    i: 0.001,
-    ts: 0.00001,
-    an: 'Dash',
-    qn: 'Ethereum',
-    o: 0.2011,
-    h: 0.20346,
-    l: 0.19784,
-    c: 0.19907,
-    v: 738.023,
-    qv: 148.09434855,
-    y: 0,
-    as: 738.023,
-    pm: 'ALTS',
-    pn: 'ALTS',
-    cs: 9708089,
-    tags: [],
-    etf: false,
-  },
-  {
-    s: 'ENGETH',
-    st: 'TRADING',
-    b: 'ENG',
-    q: 'ETH',
-    ba: '',
-    qa: 'Ξ',
-    i: 1,
-    ts: 1e-7,
-    an: 'Enigma',
-    qn: 'Ethereum',
-    o: 0.0020726,
-    h: 0.0021104,
-    l: 0.0017611,
-    c: 0.0017951,
-    v: 258026,
-    qv: 481.247821,
-    y: 0,
-    as: 258026,
-    pm: 'ALTS',
-    pn: 'ALTS',
-    cs: 74836171,
-    tags: ['mining-zone'],
-    etf: false,
-  },
-  {
-    s: 'TRXXRP',
-    st: 'TRADING',
-    b: 'TRX',
-    q: 'XRP',
-    ba: '',
-    qa: '',
-    i: 0.1,
-    ts: 0.00001,
-    an: 'TRON',
-    qn: 'Ripple',
-    o: 0.11988,
-    h: 0.12277,
-    l: 0.10899,
-    c: 0.11181,
-    v: 6904878,
-    qv: 789210.637826,
-    y: 0,
-    as: 6904878,
-    pm: 'ALTS',
-    pn: 'ALTS',
-    cs: 71659657369,
-    tags: ['mining-zone'],
-    etf: false,
-  },
-];
+  const renderWidget = (products: IProduct[]) =>
+    render(
+      <ProductsContextProvider value={products}>
+        <TickerWidgetLayout defaultMarket={DEFAULT_MARKET} />
+      </ProductsContextProvider>,
+    );
 
-const tickerData = [
-  {
-    e: '24hrMiniTicker',
-    E: 1600619759229,
-    s: 'BNBBTC',
-    c: '0.03400200',
-    o: '0.03478600',
-    h: '0.03495000',
-    l: '0.03388300',
-    v: '250983.25500000',
-    q: '8684.11973573',
-  },
-  {
-    e: '24hrMiniTicker',
-    E: 1600619759321,
-    s: 'UMABTC',
-    c: '0.00001136',
-    o: '0.00001051',
-    h: '0.00001435',
-    l: '0.00001051',
-    v: '24772060.00000000',
-    q: '304.35494788',
-  },
-];
-
-const renderWidget = (products: IProduct[]) =>
-  render(
-    <ProductsContextProvider value={products}>
-      <TickerWidgetLayout defaultMarket={DEFAULT_MARKET} />
-    </ProductsContextProvider>,
-  );
-
-describe('TickerWidget', () => {
-  // window.fetch = fetchMock;
+  const setItemLocalStorageSpy = jest.spyOn(window.localStorage, 'setItem');
 
   beforeEach(() => {
     mockedGetProducts.mockReset();
     mockedOnMiniTickerShorten.mockReset();
 
     mockedGetProducts.mockResolvedValueOnce(products);
-    mockedOnMiniTickerShorten.mockImplementationOnce((listener) => {
-      listener(tickerData);
-      // return tickerMessage;
-    });
+    mockedOnMiniTickerShorten.mockImplementationOnce((listener) =>
+      listener(ticker),
+    );
+
+    setItemLocalStorageSpy.mockClear();
+  });
+
+  it.skip('show error message if connection is broken', () => {
+    mockedGetProducts.mockReset();
+    mockedGetProducts.mockRejectedValue('Fetch error');
+    renderWidget(products);
+
+    expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
   });
 
   it('show default market on load', () => {
     renderWidget(products);
 
     expect(mockedGetProducts).toHaveBeenCalledTimes(1);
-    // expect(fetchMock.mock.calls[0][0]).toEqual('https://google.com');
 
     expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
     expect(screen.queryByText('ENG/ETH')).not.toBeInTheDocument();
@@ -359,5 +219,47 @@ describe('TickerWidget', () => {
 
     expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
     expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
+  });
+
+  it('on init favorites restores from cache', () => {
+    window.localStorage.setItem('favorites', JSON.stringify(['TRXXRP']));
+
+    renderWidget(products);
+
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+
+    UserEvent.click(screen.getByRole('button', { name: 'Favorite' }));
+
+    expect(setItemLocalStorageSpy).toBeCalledTimes(1);
+
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('TRX/XRP');
+  });
+
+  it('on add symbol to favorite it have been cached', () => {
+    window.localStorage.setItem('favorites', JSON.stringify(['TRXXRP']));
+
+    renderWidget(products);
+
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+
+    const favoriteBtns = screen.getAllByTitle('Toggle favorite');
+
+    UserEvent.click(favoriteBtns[0]);
+
+    expect(setItemLocalStorageSpy).toBeCalledTimes(2);
+    expect(setItemLocalStorageSpy).toHaveBeenNthCalledWith(
+      1,
+      'favorites',
+      '["TRXXRP"]',
+    );
+    expect(setItemLocalStorageSpy).toHaveBeenNthCalledWith(
+      2,
+      'favorites',
+      '["TRXXRP","UMABTC"]',
+    );
+
+    UserEvent.click(screen.getByRole('button', { name: 'Favorite' }));
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('TRX/XRP');
   });
 });

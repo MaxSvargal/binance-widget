@@ -8,16 +8,16 @@ import { IActiveMarketState } from '..';
 
 interface IMarketsMenuProps {
   onChange(market: IActiveMarketState): void;
+  onChangeToFavorite(): void;
 }
 
-export const MarketsMenu: FC<IMarketsMenuProps> = ({ onChange }) => {
+export const MarketsMenu: FC<IMarketsMenuProps> = ({
+  onChange,
+  onChangeToFavorite,
+}) => {
   const [products] = useContext(productsContext);
   const altsProducts = useSelectProductsByParentGroupByQoute(products, 'ALTS');
   const fiatProducts = useSelectProductsByParentGroupByQoute(products, 'USDⓈ');
-
-  const onSelectFavorite = useCallback(() => {
-    // foo
-  }, []);
 
   const onSelectMarket = useCallback(
     (market: string) => () => {
@@ -40,7 +40,7 @@ export const MarketsMenu: FC<IMarketsMenuProps> = ({ onChange }) => {
 
   return (
     <div>
-      <MarketButton onClick={onSelectFavorite}>Favorite</MarketButton>
+      <MarketButton onClick={onChangeToFavorite}>Favorite</MarketButton>
       <MarketButton onClick={onSelectMarket('BNB')}>BNB</MarketButton>
       <MarketButton onClick={onSelectMarket('BTC')}>BTC</MarketButton>
       <MarketDropdownButton

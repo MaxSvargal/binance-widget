@@ -1,8 +1,8 @@
 import { useReducer } from 'react';
 import { IMiniTickerShorten } from '../interfaces/ticker';
 
-type IState = Map<string, IMiniTickerShorten>;
-type IAction = IMiniTickerShorten[];
+export type IState = Map<string, IMiniTickerShorten>;
+export type IAction = IMiniTickerShorten[];
 type IUseTickerReducer = (state: IState, action: IAction) => IState;
 
 export const useTickerReducer = (): [IState, React.Dispatch<IAction>] =>

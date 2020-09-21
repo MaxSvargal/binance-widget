@@ -2,6 +2,8 @@ import { numberPrettify } from '../../shared/helpers/numbers';
 import { IProduct } from '../interfaces/products';
 import { IMiniTickerShorten } from '../interfaces/ticker';
 
+// move to components
+
 export const getPerc = (x: number, y: number): number => ((y - x) / x) * 100;
 
 export const getProductField = (

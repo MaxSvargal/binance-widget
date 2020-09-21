@@ -2,11 +2,9 @@ import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { IActiveMarketState, SortBy, SortByRadioGroup } from '..';
 
 import { productsContext } from '../contexts/productsContexts';
-import { useSelectProductsByMarket } from '../hooks/useSelectProductsByMarket';
-import { IProduct } from '../interfaces/products';
 import { getProducts } from '../repos/binanceRepo';
 import { MarketsMenu } from './MarketsMenu';
-import { ProductsTable } from './ProductsTable';
+import { ProductsTable } from './productsTable/ProductsTable';
 import { SearchField } from './SearchField';
 import { SortByColumn } from './SortByColumn';
 import { SortByRadio } from './SortByRadio';
@@ -18,13 +16,11 @@ interface ITickerWidgetLayoutProps {
 export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   defaultMarket,
 }) => {
-  const [products, setProducts] = useContext(productsContext);
+  const [, setProducts] = useContext(productsContext);
 
   const [activeMarket, setActiveMarket] = useState<IActiveMarketState>(
     defaultMarket,
   );
-
-  const values = useSelectProductsByMarket(products, activeMarket);
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -45,21 +41,9 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
     }
   }, []);
 
-  const [findedProducts, setFindedProducts] = useState<IProduct[]>([]);
-
   const onChangeMarket = useCallback(setActiveMarket, []);
 
   const onSearch = useCallback((value: string) => setSearchValue(value), []);
-
-  useEffect(() => {
-    setFindedProducts(
-      // TODO: Take out
-      products.filter((product) =>
-        product.s.includes(searchValue.toUpperCase()),
-      ),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
 
   useEffect(() => {
     getProducts()
@@ -74,11 +58,20 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
     setActiveSortBy(value);
   }, []);
 
-  const productsValues = searchValue === '' ? values : findedProducts;
+  const [isActiveFavorite, setIsActiveFavorite] = useState(false);
+
+  const onChangeToFavorite = useCallback(() => setIsActiveFavorite(true), []);
+
+  useEffect(() => {
+    setIsActiveFavorite(false);
+  }, [activeMarket]);
 
   return (
     <>
-      <MarketsMenu onChange={onChangeMarket} />
+      <MarketsMenu
+        onChange={onChangeMarket}
+        onChangeToFavorite={onChangeToFavorite}
+      />
       <div>
         <SearchField value={searchValue} onChange={onSearch} />
         <SortByRadio value={activeSortButton} onChange={onChangeSortButton} />
@@ -89,9 +82,11 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
         onChange={onChangeSort}
       />
       <ProductsTable
-        values={productsValues}
+        search={searchValue}
+        showFavorite={isActiveFavorite}
         sortBy={activeSortBy}
         extraColumn={activeSortButton}
+        activeMarket={activeMarket}
       />
     </>
   );

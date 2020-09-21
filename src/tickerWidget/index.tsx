@@ -25,11 +25,10 @@ export enum SortByRadioGroup {
   Volume = 'Volume',
 }
 
-export interface IActiveMarketState {
-  // shape
-  asset?: string;
-  group?: string;
-}
+export type IActiveMarketState = Partial<{
+  asset: string;
+  group: string;
+}>;
 
 export const TickerWidget: FC = () => (
   <Compose components={[ProductsContextProvider, TickerContextProvider]}>
