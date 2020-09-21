@@ -1,11 +1,7 @@
 import React, { FC } from 'react';
 
-import { Compose } from '../shared/components/Compose';
 import { TickerWidgetLayout } from './components/TickerWidgetLayout';
-import {
-  ProductsContextProvider,
-  TickerContextProvider,
-} from './contexts/productsContexts';
+import { ProductsContextProvider } from './contexts/productsContexts';
 
 import { BinanceSocketRepo } from './repos/binanceSocketRepo';
 
@@ -31,9 +27,9 @@ export type IActiveMarketState = Partial<{
 }>;
 
 export const TickerWidget: FC = () => (
-  <Compose components={[ProductsContextProvider, TickerContextProvider]}>
+  <ProductsContextProvider>
     <TickerWidgetLayout defaultMarket={{ asset: 'BTC' }} />
-  </Compose>
+  </ProductsContextProvider>
 );
 
 export const binanceSocketRepo = new BinanceSocketRepo();

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Listener = (...args: any[]) => void;
 interface IEvents {
   [event: string]: Listener[];
@@ -28,7 +29,7 @@ export class EventEmitter {
 
   public removeAllListeners(): void {
     Object.keys(this.events).forEach((event: string) =>
-      this.events[event].splice(0, this.events[event].length)
+      this.events[event].splice(0, this.events[event].length),
     );
   }
 

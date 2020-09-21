@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { useLocalStorageState } from '../hooks/useLocalStorage';
+import { useLocalStorageState } from '../../shared/hooks/useLocalStorageState';
 import { IProduct } from '../interfaces/products';
 
 export const useFavorites = (
