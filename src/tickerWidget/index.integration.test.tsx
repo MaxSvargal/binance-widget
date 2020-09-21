@@ -77,9 +77,8 @@ describe('Ticker Widget', () => {
   it('show products list on select one of ALTS markets', () => {
     renderWidget(products);
 
-    const ethBtn = screen.getByRole('button', { name: /ETH/i });
-
-    UserEvent.click(ethBtn);
+    UserEvent.hover(screen.getByRole('tooltip', { name: /ALTS/i }));
+    UserEvent.click(screen.getByRole('button', { name: /ETH/i }));
 
     expect(screen.getByText('DASH/ETH')).toBeInTheDocument();
     expect(screen.getByText('ENG/ETH')).toBeInTheDocument();
@@ -90,9 +89,8 @@ describe('Ticker Widget', () => {
   it('show products list on select all ALTS markets', () => {
     renderWidget(products);
 
-    const altsBtn = screen.getByRole('button', { name: /ALTS/i });
-
-    UserEvent.click(altsBtn);
+    UserEvent.hover(screen.getByRole('tooltip', { name: /ALTS/i }));
+    UserEvent.click(screen.getByRole('button', { name: /ALTS/i }));
 
     expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
     expect(screen.getByText('DASH/ETH')).toBeInTheDocument();

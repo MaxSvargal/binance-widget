@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 
 interface IMarketDropdownButtonProps {
   children: string;
@@ -22,10 +22,20 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
     onSelectAll,
   ]);
 
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = useCallback(
+    (value: boolean) => () => setShowDropdown(value),
+    [],
+  );
+
   return (
-    <>
-      <div>{children}</div>
-      <div>
+    <div
+      onMouseEnter={toggleDropdown(true)}
+      onMouseLeave={toggleDropdown(false)}
+    >
+      <div role="tooltip">{children}</div>
+      <div style={{ visibility: showDropdown ? 'visible' : 'hidden' }}>
         <button onClick={onSelectAllHandle}>{children}</button>
         {values.map((value) => (
           <button key={value} onClick={onClickHandle(value)}>
@@ -33,6 +43,6 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
           </button>
         ))}
       </div>
-    </>
+    </div>
   );
 };
