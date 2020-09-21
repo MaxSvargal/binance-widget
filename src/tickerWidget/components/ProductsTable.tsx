@@ -1,17 +1,17 @@
 import React, { FC, useContext } from 'react';
 
-import { IActiveMarketState, SortBy, SortByRadioGroup } from '../..';
-import { productsContext } from '../../contexts/productsContexts';
+import { IActiveMarketState, SortBy, SortByRadioGroup } from '..';
+import { productsContext } from '../contexts/productsContexts';
 import {
   getChangePerc,
   getLastPrice,
   getVolumeValue,
-} from '../../helpers/productsFields';
-import { useFavorites } from '../../hooks/useFavorites';
-import { useProductsSearch } from '../../hooks/useProductsSearch';
-import { useProductsSort } from '../../hooks/useProductsSort';
-import { useSelectProductsByMarket } from '../../hooks/useSelectProductsByMarket';
-import { useTicker } from '../../hooks/useTicker';
+} from '../helpers/productsFields';
+import { useFavorites } from '../hooks/useFavorites';
+import { useProductsSearch } from '../hooks/useProductsSearch';
+import { useProductsSort } from '../hooks/useProductsSort';
+import { useSelectProductsByMarket } from '../hooks/useSelectProductsByMarket';
+import { useTicker } from '../hooks/useTicker';
 import { ProductsTableRow } from './ProductsTableRow';
 
 export interface IProductsTableProps {
@@ -32,7 +32,9 @@ export const ProductsTable: FC<IProductsTableProps> = ({
   const [products] = useContext(productsContext);
   const tickersMap = useTicker();
 
-  const [favoritesProducts, onToggleFavorite] = useFavorites(products);
+  const [favoritesSymbols, favoritesProducts, onToggleFavorite] = useFavorites(
+    products,
+  );
   const marketProducts = useSelectProductsByMarket(products, activeMarket);
   const findedProducts = useProductsSearch(products, search);
 
@@ -59,6 +61,7 @@ export const ProductsTable: FC<IProductsTableProps> = ({
               : getVolumeValue(product, tickersMap)
           }
           onFavorite={onToggleFavorite(product.s)}
+          isFavorite={favoritesSymbols.includes(product.s)}
         />
       ))}
     </div>

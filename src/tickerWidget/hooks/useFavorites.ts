@@ -5,7 +5,7 @@ import { IProduct } from '../interfaces/products';
 
 export const useFavorites = (
   products: IProduct[],
-): readonly [IProduct[], (symbol: string) => () => void] => {
+): readonly [string[], IProduct[], (symbol: string) => () => void] => {
   const [favoritesSymbols, setFavoritesSymbols] = useLocalStorageState<
     string[]
   >('favorites', []);
@@ -26,5 +26,5 @@ export const useFavorites = (
     [favoritesSymbols],
   );
 
-  return [favoritesProducts, onToggleFavorite] as const;
+  return [favoritesSymbols, favoritesProducts, onToggleFavorite] as const;
 };

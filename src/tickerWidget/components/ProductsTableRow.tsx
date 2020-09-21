@@ -5,6 +5,7 @@ interface IProps {
   price: string;
   extra: string;
   onFavorite(): void;
+  isFavorite: boolean;
 }
 
 export const ProductsTableRow: FC<IProps> = ({
@@ -12,10 +13,11 @@ export const ProductsTableRow: FC<IProps> = ({
   price,
   extra,
   onFavorite,
+  isFavorite,
 }) => (
   <div key={symbol} role="row" style={{ display: 'flex', padding: '1rem' }}>
     <button title="Toggle favorite" onClick={onFavorite}>
-      Toggle favorite
+      {isFavorite ? 'remove' : 'add'}
     </button>
     <div role="cell">{symbol}</div>
     <div style={{ padding: '0 1rem' }}>{price}</div>
