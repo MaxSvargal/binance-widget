@@ -1,6 +1,11 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
+import { IActiveMarketState } from '..';
+import { MarketButton } from './MarketButton';
+
+import styles from './MarketDropdownButton.module.css';
 
 interface IMarketDropdownButtonProps {
+  activeMarket: IActiveMarketState;
   children: string;
   values: string[];
   onSelect: (value: string) => void;
@@ -8,10 +13,11 @@ interface IMarketDropdownButtonProps {
 }
 
 export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
-  onSelect,
-  onSelectAll,
+  activeMarket,
   children,
   values,
+  onSelect,
+  onSelectAll,
 }) => {
   const onClickHandle = useCallback((value: string) => () => onSelect(value), [
     onSelect,
@@ -29,18 +35,45 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
     [],
   );
 
+  const isActive = useMemo(
+    () =>
+      activeMarket.group === children ||
+      (activeMarket?.asset && values.includes(activeMarket.asset)),
+    [activeMarket, values, children],
+  );
+
   return (
     <div
       onMouseEnter={toggleDropdown(true)}
       onMouseLeave={toggleDropdown(false)}
     >
-      <div role="tooltip">{children}</div>
-      <div style={{ visibility: showDropdown ? 'visible' : 'hidden' }}>
-        <button onClick={onSelectAllHandle}>{children}</button>
+      <div
+        role="tooltip"
+        className={`${styles.title} ${isActive && styles.titleActive}`}
+      >
+        {isActive && !activeMarket.group
+          ? values.find((v) => v === activeMarket.asset)
+          : children}
+      </div>
+      <div
+        className={`${styles.dropdown} ${
+          styles[showDropdown ? 'visible' : 'hidden']
+        }`}
+      >
+        <MarketButton
+          active={activeMarket.group === children}
+          onClick={onSelectAllHandle}
+        >
+          &#9868; {children}
+        </MarketButton>
         {values.map((value) => (
-          <button key={value} onClick={onClickHandle(value)}>
-            {value}
-          </button>
+          <MarketButton
+            key={value}
+            active={activeMarket.asset === value}
+            onClick={onClickHandle(value)}
+          >
+            &#x2500; {value}
+          </MarketButton>
         ))}
       </div>
     </div>

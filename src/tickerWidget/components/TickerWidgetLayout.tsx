@@ -52,6 +52,8 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   ) : (
     <>
       <MarketsMenu
+        isActiveFavorite={isActiveFavorite}
+        activeMarket={activeMarket}
         onChange={setActiveMarket}
         onChangeToFavorite={onChangeToFavorite}
       />
@@ -71,7 +73,7 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
         extraColumn={activeSortButton}
         activeMarket={activeMarket}
       />
-      <div style={{ position: 'absolute', top: 0, left: 0 }}>
+      <div style={{ position: 'fixed', bottom: 40, right: 40 }}>
         <ConnectToggleBtn />
       </div>
     </>

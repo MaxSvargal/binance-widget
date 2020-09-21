@@ -1,0 +1,24 @@
+.dropdown {
+  position: absolute;
+  background: var(--foreground);
+}
+
+.dropdown.visible {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown.hidden {
+  display: none;
+}
+
+.title {
+  padding: .5em 1em;
+  border: 0;
+  cursor: default;
+  /* background: var(--blue); */
+}
+
+.titleActive {
+  background: var(--orange);
+}

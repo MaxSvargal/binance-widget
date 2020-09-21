@@ -6,9 +6,7 @@ import { TickerWidget } from './tickerWidget';
 const App: FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <TickerWidget />
-      </header>
+      <TickerWidget />
     </div>
   );
 };

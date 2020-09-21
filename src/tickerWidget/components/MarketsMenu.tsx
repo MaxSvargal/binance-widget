@@ -6,12 +6,18 @@ import { MarketButton } from './MarketButton';
 import { MarketDropdownButton } from './MarketDropdownButton';
 import { IActiveMarketState } from '..';
 
+import styles from './MarketsMenu.module.css';
+
 interface IMarketsMenuProps {
+  isActiveFavorite: boolean;
+  activeMarket: IActiveMarketState;
   onChange(market: IActiveMarketState): void;
   onChangeToFavorite(): void;
 }
 
 export const MarketsMenu: FC<IMarketsMenuProps> = ({
+  isActiveFavorite,
+  activeMarket,
   onChange,
   onChangeToFavorite,
 }) => {
@@ -39,12 +45,25 @@ export const MarketsMenu: FC<IMarketsMenuProps> = ({
   );
 
   return (
-    <div>
-      <MarketButton onClick={onChangeToFavorite}>Favorite</MarketButton>
-      <MarketButton onClick={onSelectMarket('BNB')}>BNB</MarketButton>
-      <MarketButton onClick={onSelectMarket('BTC')}>BTC</MarketButton>
+    <div className={styles.container}>
+      <MarketButton active={isActiveFavorite} onClick={onChangeToFavorite}>
+        Favorite
+      </MarketButton>
+      <MarketButton
+        active={!isActiveFavorite && activeMarket.asset === 'BNB'}
+        onClick={onSelectMarket('BNB')}
+      >
+        BNB
+      </MarketButton>
+      <MarketButton
+        active={!isActiveFavorite && activeMarket.asset === 'BTC'}
+        onClick={onSelectMarket('BTC')}
+      >
+        BTC
+      </MarketButton>
       <MarketDropdownButton
         values={Object.keys(altsProducts)}
+        activeMarket={activeMarket}
         onSelect={onSelectDropdownMarket}
         onSelectAll={onSelectAllDropdownMarkets}
       >
@@ -52,6 +71,7 @@ export const MarketsMenu: FC<IMarketsMenuProps> = ({
       </MarketDropdownButton>
       <MarketDropdownButton
         values={Object.keys(fiatProducts)}
+        activeMarket={activeMarket}
         onSelect={onSelectDropdownMarket}
         onSelectAll={onSelectAllDropdownMarkets}
       >
