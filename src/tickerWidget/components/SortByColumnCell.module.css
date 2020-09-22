@@ -1,0 +1,52 @@
+.container {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+.button {
+  position: relative;
+  background: transparent;
+  border: 0;
+  color: var(--white);
+  font-size: 1em;
+  padding: 0;
+  text-align: left;
+  font-weight: bold;
+  padding-right: 1em;
+  cursor: pointer;
+  display: inline;
+}
+
+.button:before {
+  top: .1em;
+  right: 0;
+  position: absolute;
+  display: inline-block;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: .2em solid transparent;
+  border-right: .2em solid transparent;
+  border-bottom: .3em solid var(--white);
+}
+
+.button:after {
+  top: .6em;
+  right: 0;
+  position: absolute;
+  display: inline-block;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: .2em solid transparent;
+  border-right: .2em solid transparent;
+  border-top: .3em solid var(--white);
+}
+
+.button.isUp:before {
+  border-bottom-color: var(--orange);
+}
+
+.button.isDown:after {
+  border-top-color: var(--orange);
+}

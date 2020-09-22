@@ -1,17 +1,7 @@
 .row {
   display: flex;
+  justify-content: space-between;
   background: var(--background);
   box-shadow: 0 .5em .5em rgba(0,0,0,.05);
   padding-bottom: .5em;
-}
-
-.cell {
-  background: transparent;
-  border: 0;
-  color: var(--white);
-  flex: 1;
-  font-size: 1em;
-  padding: 0;
-  text-align: left;
-  font-weight: bold;
 }

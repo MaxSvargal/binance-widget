@@ -1,7 +1,8 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import { SortBy, SortByRadioGroup } from '..';
 
 import styles from './SortByColumn.module.css';
+import { SortByColumnCell } from './SortByColumnCell';
 
 interface IProps {
   sortBy: SortBy;
@@ -39,25 +40,44 @@ export const SortByColumn: FC<IProps> = ({ sortBy, extraColumn, onChange }) => {
     SortBy.VolumeDesc,
   ]);
 
+  const activeExtraIsChange = useMemo(
+    () => extraColumn === SortByRadioGroup.Change,
+    [extraColumn],
+  );
+
   return (
     <div className={styles.row}>
-      <button onClick={onSortByPair} className={styles.cell}>
-        Pair
-      </button>
-      <button onClick={onSortByPrice} className={styles.cell}>
-        Last Price
-      </button>
-      <button
-        onClick={
-          extraColumn === SortByRadioGroup.Change
-            ? onSortByChange
-            : onSortByVolume
-        }
-        className={styles.cell}
-        style={{ flex: 0.5 }}
+      <SortByColumnCell
+        onClick={onSortByPair}
+        isSortedUp={SortBy.PairAsc === sortBy}
+        isSortedDown={SortBy.PairDesc === sortBy}
       >
-        {extraColumn === SortByRadioGroup.Change ? 'Change' : 'Volume'}
-      </button>
+        Pair
+      </SortByColumnCell>
+      <SortByColumnCell
+        onClick={onSortByPrice}
+        isSortedUp={SortBy.PriceAsc === sortBy}
+        isSortedDown={SortBy.PriceDesc === sortBy}
+      >
+        Last Price
+      </SortByColumnCell>
+      <div style={{ flex: 0.5 }}>
+        <SortByColumnCell
+          onClick={activeExtraIsChange ? onSortByChange : onSortByVolume}
+          isSortedUp={
+            activeExtraIsChange
+              ? SortBy.ChangeAsc === sortBy
+              : SortBy.VolumeAsc === sortBy
+          }
+          isSortedDown={
+            activeExtraIsChange
+              ? SortBy.ChangeDesc === sortBy
+              : SortBy.VolumeDesc === sortBy
+          }
+        >
+          {activeExtraIsChange ? 'Change' : 'Volume'}
+        </SortByColumnCell>
+      </div>
     </div>
   );
 };
