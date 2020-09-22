@@ -44,7 +44,11 @@ export const SearchField: FC<ISearchFieldProps> = ({ value, onChange }) => {
         className={styles.input}
       />
       {currentInput !== '' && (
-        <button onClick={onClickClear} className={styles.clearBtn} />
+        <button
+          onClick={onClickClear}
+          className={styles.clearBtn}
+          title="Clear search results"
+        />
       )}
     </div>
   );

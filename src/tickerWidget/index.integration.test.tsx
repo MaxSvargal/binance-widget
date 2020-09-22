@@ -117,7 +117,7 @@ describe('Ticker Widget', () => {
 
     await UserEvent.type(screen.getByRole('searchbox'), 'xrp');
 
-    UserEvent.click(screen.getByRole('button', { name: 'Clear' }));
+    UserEvent.click(screen.getByTitle('Clear search results'));
 
     expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
   });
