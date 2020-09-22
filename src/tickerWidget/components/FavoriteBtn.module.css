@@ -1,0 +1,10 @@
+.button {
+  background: transparent;
+  border: 0;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.button.active {
+  color: var(--yellow);
+}
