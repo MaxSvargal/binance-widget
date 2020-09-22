@@ -4,8 +4,8 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
 
-// import { enableFetchMocks } from 'jest-fetch-mock';
-// enableFetchMocks();
+import { enableFetchMocks } from 'jest-fetch-mock';
+enableFetchMocks();
 
 const localStorageMock = (function () {
   let store = new Map();
@@ -28,4 +28,4 @@ const localStorageMock = (function () {
   };
 })();
 
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+Object.defineProperty(global, 'localStorage', { value: localStorageMock });
