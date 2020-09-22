@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-import { useDebouncedCallback } from '../../shared/hooks/useDebouncedCallback';
+import { useDebouncedCallback } from '../../../shared/hooks/useDebouncedCallback';
 
 import styles from './SearchField.module.css';
 
@@ -28,7 +28,7 @@ export const SearchField: FC<ISearchFieldProps> = ({ value, onChange }) => {
       setCurrentInput(value);
       onChangeHandleDebounced(value);
     },
-    [],
+    [onChangeHandleDebounced],
   );
 
   const onClickClear = useCallback(() => onChange(''), [onChange]);

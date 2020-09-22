@@ -1,8 +1,8 @@
 import React, { FC, useCallback, useContext } from 'react';
 
-import { productsContext } from '../contexts/productsContexts';
-import { useSelectProductsByParentGroupByQoute } from '../hooks/useSelectProductsByParentGroupByQoute';
-import { IActiveMarketState } from '../interfaces/markets';
+import { productsContext } from '../../contexts/productsContexts';
+import { useSelectProductsByParentGroupByQoute } from '../../hooks/useSelectProductsByParentGroupByQoute';
+import { IActiveMarketState } from '../../interfaces/markets';
 import { MarketButton } from './MarketButton';
 import { MarketDropdownButton } from './MarketDropdownButton';
 

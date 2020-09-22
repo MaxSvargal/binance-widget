@@ -1,8 +1,9 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { SortBy, SortByRadioGroup } from '..';
+import { SortBy, SortByRadioGroup } from '../..';
 
-import styles from './SortByColumn.module.css';
 import { SortByColumnCell } from './SortByColumnCell';
+
+import styles from './ProductsHeaderSortBy.module.css';
 
 interface IProps {
   sortBy: SortBy;
@@ -22,7 +23,11 @@ const useSortCallback = (
     sortBy,
   ]);
 
-export const SortByColumn: FC<IProps> = ({ sortBy, extraColumn, onChange }) => {
+export const ProductsHeaderSortBy: FC<IProps> = ({
+  sortBy,
+  extraColumn,
+  onChange,
+}) => {
   const onSortByPair = useSortCallback(onChange, sortBy, [
     SortBy.PairAsc,
     SortBy.PairDesc,

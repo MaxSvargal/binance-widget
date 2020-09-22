@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { IActiveMarketState } from '../interfaces/markets';
+import { IActiveMarketState } from '../../interfaces/markets';
 import { MarketButton } from './MarketButton';
 
 import styles from './MarketDropdownButton.module.css';
@@ -52,7 +52,7 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
       isActive && activeMarket.asset
         ? values.find((v) => v === activeMarket.asset)
         : children,
-    [isActive],
+    [children, values, isActive, activeMarket],
   );
 
   return (

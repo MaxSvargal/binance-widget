@@ -1,15 +1,15 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
-import { SortByRadioGroup } from '..';
+import { SortByRadioGroup } from '../..';
 import { RadioBtn } from './RadioBtn';
 
-import styles from './SortByRadio.module.css';
+import styles from './SortRadioControls.module.css';
 
 interface IProps {
   value: SortByRadioGroup;
   onChange(value: SortByRadioGroup): void;
 }
 
-export const SortByRadio: FC<IProps> = ({ value, onChange }) => {
+export const SortRadioControls: FC<IProps> = ({ value, onChange }) => {
   const onChangeHandle = useCallback(
     (event: ChangeEvent<HTMLInputElement>) =>
       onChange(event.target.value as SortByRadioGroup),

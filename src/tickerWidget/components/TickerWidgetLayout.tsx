@@ -8,11 +8,11 @@ import { IActiveMarketState } from '../interfaces/markets';
 import { getProducts } from '../repos/binanceRepo';
 
 import { ConnectToggleBtn } from './ConnectToggleBtn';
-import { MarketsMenu } from './MarketsMenu';
-import { ProductsTable } from './ProductsTable';
-import { SearchField } from './SearchField';
-import { SortByColumn } from './SortByColumn';
-import { SortByRadio } from './SortByRadio';
+import { MarketsMenu } from './marketsMenu/MarketsMenu';
+import { ProductsHeaderSortBy } from './productsHeaderSortBy/ProductsHeaderSortBy';
+import { ProductsTable } from './productsTable/ProductsTable';
+import { SearchField } from './search/SearchField';
+import { SortRadioControls } from './sortRadioControls/SortRadioControls';
 
 import styles from './TickerWidgetLayout.module.css';
 
@@ -63,11 +63,14 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
       </div>
       <div className={styles.searchAndSortBox}>
         <SearchField value={searchValue} onChange={setSearchValue} />
-        <SortByRadio value={activeSortButton} onChange={onChangeSortButton} />
+        <SortRadioControls
+          value={activeSortButton}
+          onChange={onChangeSortButton}
+        />
       </div>
       <div className={styles.productsTable}>
         <div className={styles.sortByRow}>
-          <SortByColumn
+          <ProductsHeaderSortBy
             sortBy={activeSortBy}
             extraColumn={activeSortButton}
             onChange={onChangeSort}
