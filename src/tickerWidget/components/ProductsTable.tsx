@@ -49,7 +49,7 @@ export const ProductsTable: FC<IProductsTableProps> = ({
   );
 
   return (
-    <div>
+    <>
       {values.map((product) => (
         /* Split into multiple components i.e. Price, Volume and use context */
         <ProductsTableRow
@@ -66,6 +66,6 @@ export const ProductsTable: FC<IProductsTableProps> = ({
           isFavorite={favoritesSymbols.includes(product.s)}
         />
       ))}
-    </div>
+    </>
   );
 };

@@ -62,21 +62,23 @@ export const SortByColumn: FC<IProps> = ({ sortBy, extraColumn, onChange }) => {
         Last Price
       </SortByColumnCell>
       <div style={{ flex: 0.5 }}>
-        <SortByColumnCell
-          onClick={activeExtraIsChange ? onSortByChange : onSortByVolume}
-          isSortedUp={
-            activeExtraIsChange
-              ? SortBy.ChangeAsc === sortBy
-              : SortBy.VolumeAsc === sortBy
-          }
-          isSortedDown={
-            activeExtraIsChange
-              ? SortBy.ChangeDesc === sortBy
-              : SortBy.VolumeDesc === sortBy
-          }
-        >
-          {activeExtraIsChange ? 'Change' : 'Volume'}
-        </SortByColumnCell>
+        {activeExtraIsChange ? (
+          <SortByColumnCell
+            onClick={onSortByChange}
+            isSortedUp={SortBy.ChangeAsc === sortBy}
+            isSortedDown={SortBy.ChangeDesc === sortBy}
+          >
+            Change
+          </SortByColumnCell>
+        ) : (
+          <SortByColumnCell
+            onClick={onSortByVolume}
+            isSortedUp={SortBy.VolumeAsc === sortBy}
+            isSortedDown={SortBy.VolumeDesc === sortBy}
+          >
+            Volume
+          </SortByColumnCell>
+        )}
       </div>
     </div>
   );
