@@ -55,8 +55,6 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
     [isActive],
   );
 
-  console.log({ isActive, isActiveFavorite });
-
   return (
     <div
       onMouseEnter={toggleDropdown(true)}
