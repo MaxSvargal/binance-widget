@@ -1,0 +1,68 @@
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance:none;
+}
+
+.container {
+  position: relative;
+}
+
+.input {
+  padding: .5em 1em;
+  background-color: var(--gray);
+  border: 1px solid var(--foreground);
+  color: var(--white);
+  outline: none;
+}
+
+.clearBtn {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 4px solid var(--pink);
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  cursor: pointer;
+  display: inline-block;
+  /* margin: 10px 20px; */
+  appearance: button;
+  transform: scale(.35);
+}
+
+.clearBtn:before {
+  left: 50%;
+  top: 50%;
+  margin-left: -12px;
+  margin-top: -2px;
+  width: 24px;
+  height: 4px;
+  background-color: var(--pink);
+  content: "";
+  position: absolute;
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.clearBtn:after {
+  width: 24px;
+  height: 4px;
+  background-color: var(--pink);
+  content: "";
+  left: 50%;
+  top: 50%;
+  margin-left: -12px;
+  margin-top: -2px;
+  position: absolute;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}

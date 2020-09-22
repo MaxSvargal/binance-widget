@@ -5,7 +5,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useDebounce } from '../../shared/hooks/useDebounce';
+
+import { useDebouncedCallback } from '../../shared/hooks/useDebouncedCallback';
+
+import styles from './SearchField.module.css';
 
 interface ISearchFieldProps {
   value: string;
@@ -13,29 +16,36 @@ interface ISearchFieldProps {
 }
 
 export const SearchField: FC<ISearchFieldProps> = ({ value, onChange }) => {
-  const [innerValue, setInnerValue] = useState(value);
-  const debouncedValue = useDebounce(innerValue, 200);
+  const [currentInput, setCurrentInput] = useState(value);
+  useEffect(() => setCurrentInput(value), [value]);
 
-  useEffect(() => {
-    onChange(innerValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onChange, debouncedValue]);
+  const onChangeHandleDebounced = useDebouncedCallback<[string]>((value) => {
+    onChange(value);
+  }, 500);
 
-  const onChangeHandle = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setInnerValue(event.target.value);
-  }, []);
+  const onChangeHandle = useCallback(
+    ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+      setCurrentInput(value);
+      onChangeHandleDebounced(value);
+    },
+    [],
+  );
 
-  const onClickClear = useCallback(() => setInnerValue(''), [setInnerValue]);
+  const onClickClear = useCallback(() => onChange(''), [onChange]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <input
         type="search"
         name="searchbox"
         onChange={onChangeHandle}
-        value={innerValue}
+        placeholder={'Type to search...'}
+        value={currentInput}
+        className={styles.input}
       />
-      <button onClick={onClickClear}>Clear</button>
+      {currentInput !== '' && (
+        <button onClick={onClickClear} className={styles.clearBtn} />
+      )}
     </div>
   );
 };
