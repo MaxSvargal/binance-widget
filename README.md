@@ -1,44 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Greetings!
+My name is Maksim and I am a JavaScript full-stack engineer.
 
-## Available Scripts
+I can offer 10 years of professional experience in front-end development and full-stack engineering. I am highly competent in TypeScript ecosystem for both front-end and back-end applications. This includes clients for web and as well as multithreading servers with NodeJS. I have an experience with server-side software like SQL and NoSQL databases, IndexedDB, streams with Kafka, caches like Redis, containerization with Docker and Kubernates. As well as that, I have had extensive experience in web design and in UI/UX development and advanced skills in Adobe Suite. So, I find it useful in designers teamwork. Of course I can write excellent adaptive CSS using the latest features like grid, flex, complex animations and more.
+I have to mention that I have successfully completed several on-line projects that you can find listed in my Resume. Most of them have been released gradually and quickly, and were as well supported for 3 years and more.
 
-In the project directory, you can run:
+My experience and expectations:
+- Fully remote work with the best people from the whole world
+- Agile environment but with long planning
+- Modeling or prototyping to make a base to produce the final software
+- TDD and BDD with QA
+- Code reviews to get meaningful and correct solutions
+- The most accurate time estimates for issues and epics
 
-### `yarn start`
+Success being for me a team affair to which everyone must contribution, I encourage the motivation by creating the conditions that allow this alchemy to take place.
+I’m looking for an opportunity where I can put my abilities to work for a mission!
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Work with Binance
+I remember your company from it's birth day and I belive in it instantly.
+I looked on your user interfaces and they are really beatiful and works well, so I already have had expirience to realize that in  competent and professional point of view.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+So, I working with cryptocurrencies since 2016 then I have had a lot of practice with automation in crypto trading. First versions of cource, was awful. So, I created a lot of experiments and well working prototypes based on technical analysis. But sometimes I couldn't control that chaos and trade bots were losing. I worked with Bitfinex API first and Binance API later. Once apon a time I switched to because it was faster, stable and cheaper!
 
-### `yarn test`
+At the same time I worked in Ducatur crypto startup from Moscow. We developed Multichain Oracles Framework and Cold Crypto Wallet based on WebRTC and QR reader for offline using.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Sometimes I coming back to my crypto ideas. At last time I got to know Linear algebra -> Machine learning -> RNN/LSTM Modeling with Tensorflow.
+So, I just try to predicate a price for a few time steps and I already have some progress. I extract weights and results from the "white noise".
 
-### `yarn build`
+I would love to work with you as a front-end engineer because I am good at it and I have a lot of experience, so for sure I will do great things!
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Test hints
+When I reading the test overview, I realized "widget" that something lightweight, so React hooks is all that I need for now. But in production, I prefer to use solid state managers like `mobx-state-tree` or `mobx-keystone`, so using one of them makes many things much easier. And style-componenta or emotion or other css-in-js libraries can help a lot if work in TypeScript environment.
+I didn't use unit tests here because the components wouldn't be shared. As with best practice,  integration testing on the front-end is the preferred.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Contacts
+- Email: maxsvargal@gmail.com
+- GitHub: https://github.com/MaxSvargal
+- Telegram: @maxsvargal
+- Skype: @maxsvargal
