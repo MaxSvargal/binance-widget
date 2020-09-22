@@ -1,6 +1,4 @@
 import React from 'react';
-import fetch from 'jest-fetch-mock';
-
 import { mocked } from 'ts-jest/utils';
 
 import { render, screen } from '@testing-library/react';
@@ -8,20 +6,25 @@ import UserEvent from '@testing-library/user-event';
 
 import { TickerWidgetLayout } from './components/TickerWidgetLayout';
 import { ProductsContextProvider } from './contexts/productsContexts';
-import { IProduct } from './interfaces/products';
-
-import { BinanceSocketRepo } from './repos/binanceSocketRepo';
 
 import products from './fixtures/products.json';
 import ticker from './fixtures/ticker.json';
 
-// Mock we repo manually because jest-websocket-mock does not work
+import { IProduct } from './interfaces/products';
+import { getProducts } from './repos/binanceRepo';
+import { BinanceSocketRepo } from './repos/binanceSocketRepo';
+
+// Mock repos manually because jest-websocket-mock just does not work
+// jest-mock-fetch throw memory leak errors
+jest.mock('./repos/binanceRepo');
 jest.mock('./repos/binanceSocketRepo');
 
-const setItemLocalStorageSpy = jest.spyOn(window.localStorage, 'setItem');
+const mockedGetProducts = mocked(getProducts, true);
 const mockedBinanceSocketRepo = mocked(BinanceSocketRepo, true);
 const mockedOnMiniTickerShorten = mockedBinanceSocketRepo.mock.instances[0]
   .onMiniTickerShorten as jest.Mock;
+
+const setItemLocalStorageSpy = jest.spyOn(window.localStorage, 'setItem');
 
 describe('Ticker Widget', () => {
   const DEFAULT_MARKET = { asset: 'BTC' };
@@ -33,23 +36,21 @@ describe('Ticker Widget', () => {
       </ProductsContextProvider>,
     );
 
-  beforeEach(async () => {
-    setItemLocalStorageSpy.mockClear();
-
-    fetch.mockResponseOnce(() =>
-      Promise.resolve(JSON.stringify({ data: products })),
-    );
+  beforeEach(() => {
+    mockedGetProducts.mockClear();
+    mockedGetProducts.mockResolvedValueOnce(products);
 
     mockedOnMiniTickerShorten.mockClear();
     mockedOnMiniTickerShorten.mockImplementationOnce((listener) =>
       listener(ticker),
     );
+    setItemLocalStorageSpy.mockClear();
   });
 
   it('show default market on load', () => {
     renderWidget(products);
 
-    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(mockedGetProducts).toHaveBeenCalledTimes(1);
 
     expect(screen.getByText('BNB/BTC')).toBeInTheDocument();
     expect(screen.queryByText('ENG/ETH')).not.toBeInTheDocument();

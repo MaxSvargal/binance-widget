@@ -4,9 +4,6 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
 
-import { enableFetchMocks } from 'jest-fetch-mock';
-enableFetchMocks();
-
 const localStorageMock = (function () {
   let store = new Map();
   return {
