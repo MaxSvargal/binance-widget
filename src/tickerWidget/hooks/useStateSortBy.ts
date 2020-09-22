@@ -20,7 +20,7 @@ export const useStateSortBy = () => {
       case SortByRadioGroup.Volume:
         return setActiveSortBy(SortBy.VolumeDesc);
       default:
-        return setActiveSortBy(SortBy.VolumeDesc);
+        return setActiveSortBy(SortBy.ChangeDesc);
     }
   }, []);
 
