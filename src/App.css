@@ -2,6 +2,7 @@
   /* Monokai palette */
   --background: rgb(46, 46, 46);
   --foreground: rgb(121, 121, 121);
+  --gray: rgb(52, 52, 52);
   --white: rgb(214, 214, 214);
   --yellow: rgb(229, 181, 103);
   --green: rgb(180, 210, 115);
@@ -14,4 +15,9 @@
 .App {
   color: var(--white);
   background-color: var(--background);
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

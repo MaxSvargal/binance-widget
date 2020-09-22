@@ -1,14 +1,16 @@
-.dropdown {
-  position: absolute;
+.container:hover .title {
   background: var(--foreground);
 }
 
-.dropdown.visible {
+.dropdown {
   display: flex;
   flex-direction: column;
+  position: absolute;
+  z-index:2;
+  background: var(--foreground);
 }
 
-.dropdown.hidden {
+.hidden {
   display: none;
 }
 
@@ -16,7 +18,7 @@
   padding: .5em 1em;
   border: 0;
   cursor: default;
-  /* background: var(--blue); */
+  min-height: 1.1em;
 }
 
 .titleActive {

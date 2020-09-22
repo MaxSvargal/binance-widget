@@ -1,6 +1,8 @@
 import React, { FC, useCallback } from 'react';
 import { SortBy, SortByRadioGroup } from '..';
 
+import styles from './SortByColumn.module.css';
+
 interface IProps {
   sortBy: SortBy;
   extraColumn: SortByRadioGroup;
@@ -38,20 +40,24 @@ export const SortByColumn: FC<IProps> = ({ sortBy, extraColumn, onChange }) => {
   ]);
 
   return (
-    <div>
-      <div>
-        <button onClick={onSortByPair}>Pair</button>
-        <button onClick={onSortByPrice}>Last Price</button>
-        <button
-          onClick={
-            extraColumn === SortByRadioGroup.Change
-              ? onSortByChange
-              : onSortByVolume
-          }
-        >
-          {extraColumn === SortByRadioGroup.Change ? 'Change' : 'Volume'}
-        </button>
-      </div>
+    <div className={styles.row}>
+      <button onClick={onSortByPair} className={styles.cell}>
+        Pair
+      </button>
+      <button onClick={onSortByPrice} className={styles.cell}>
+        Last Price
+      </button>
+      <button
+        onClick={
+          extraColumn === SortByRadioGroup.Change
+            ? onSortByChange
+            : onSortByVolume
+        }
+        className={styles.cell}
+        style={{ flex: 0.5 }}
+      >
+        {extraColumn === SortByRadioGroup.Change ? 'Change' : 'Volume'}
+      </button>
     </div>
   );
 };

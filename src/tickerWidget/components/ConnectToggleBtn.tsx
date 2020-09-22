@@ -2,6 +2,8 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { binanceSocketRepo } from '..';
 import { WebsocketReadyState } from '../../shared/repos/WebSocketRepo';
 
+import styles from './ConnectToggleBtn.module.css';
+
 export const ConnectToggleBtn: FC = () => {
   const [readyState, setReadyState] = useState<WebsocketReadyState>(
     WebsocketReadyState.CONNECTING,
@@ -37,8 +39,17 @@ export const ConnectToggleBtn: FC = () => {
   }, [readyState]);
 
   return (
-    <div>
-      <button onClick={onToggle}>{label}</button>
+    <div className={styles.container}>
+      <button
+        onClick={onToggle}
+        className={styles.button}
+        disabled={
+          readyState === WebsocketReadyState.CONNECTING ||
+          readyState === WebsocketReadyState.CLOSING
+        }
+      >
+        {label}
+      </button>
     </div>
   );
 };

@@ -1,0 +1,18 @@
+.container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.button {
+  background-color: var(--blue);
+  border: 0;
+  color: var(--white);
+  padding: .5em 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}

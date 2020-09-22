@@ -2,6 +2,8 @@ import React, { ChangeEvent, FC, useCallback } from 'react';
 import { SortByRadioGroup } from '..';
 import { RadioBtn } from './RadioBtn';
 
+import styles from './SortByRadio.module.css';
+
 interface IProps {
   value: SortByRadioGroup;
   onChange(value: SortByRadioGroup): void;
@@ -15,7 +17,7 @@ export const SortByRadio: FC<IProps> = ({ value, onChange }) => {
   );
 
   return (
-    <form>
+    <form className={styles.rowContainer}>
       {Object.values(SortByRadioGroup).map((radioValue) => (
         <RadioBtn
           id={radioValue}

@@ -8,12 +8,13 @@ import { useStateSortBy } from '../hooks/useStateSortBy';
 import { getProducts } from '../repos/binanceRepo';
 
 import { ConnectToggleBtn } from './ConnectToggleBtn';
-import { ErrorConnection } from './ErrorConnection';
 import { MarketsMenu } from './MarketsMenu';
 import { ProductsTable } from './ProductsTable';
 import { SearchField } from './SearchField';
 import { SortByColumn } from './SortByColumn';
 import { SortByRadio } from './SortByRadio';
+
+import styles from './TickerWidgetLayout.module.css';
 
 interface ITickerWidgetLayoutProps {
   defaultMarket: IActiveMarketState;
@@ -22,16 +23,23 @@ interface ITickerWidgetLayoutProps {
 export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   defaultMarket,
 }) => {
-  const [error, setError] = useState<Error | undefined>();
-
   const [, setProducts] = useContext(productsContext);
 
   useEffect(() => {
-    getProducts().then(setProducts).catch(setError);
+    getProducts()
+      .then(setProducts)
+      .catch((err) => {
+        console.log(err);
+        // setError(err) if needed
+      });
   }, [setProducts]);
 
   const [activeMarket, setActiveMarket] = useState<IActiveMarketState>(
     defaultMarket,
+  );
+
+  const [isActiveFavorite, onChangeToFavorite] = useShowFavoriteState(
+    activeMarket,
   );
 
   const [searchValue, setSearchValue] = useState('');
@@ -43,39 +51,37 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
     onChangeSortButton,
   } = useStateSortBy();
 
-  const [isActiveFavorite, onChangeToFavorite] = useShowFavoriteState(
-    activeMarket,
-  );
-
-  return error ? (
-    <ErrorConnection />
-  ) : (
-    <>
-      <MarketsMenu
-        isActiveFavorite={isActiveFavorite}
-        activeMarket={activeMarket}
-        onChange={setActiveMarket}
-        onChangeToFavorite={onChangeToFavorite}
-      />
-      <div>
+  return (
+    <div className={styles.container}>
+      <div className={styles.marketsMenuBox}>
+        <MarketsMenu
+          isActiveFavorite={isActiveFavorite}
+          activeMarket={activeMarket}
+          onChange={setActiveMarket}
+          onChangeToFavorite={onChangeToFavorite}
+        />
+      </div>
+      <div className={styles.searchAndSortBox}>
         <SearchField value={searchValue} onChange={setSearchValue} />
         <SortByRadio value={activeSortButton} onChange={onChangeSortButton} />
       </div>
-      <SortByColumn
-        sortBy={activeSortBy}
-        extraColumn={activeSortButton}
-        onChange={onChangeSort}
-      />
-      <ProductsTable
-        search={searchValue}
-        showFavorite={isActiveFavorite}
-        sortBy={activeSortBy}
-        extraColumn={activeSortButton}
-        activeMarket={activeMarket}
-      />
-      <div style={{ position: 'fixed', bottom: 40, right: 40 }}>
-        <ConnectToggleBtn />
+      <div className={styles.productsTable}>
+        <div className={styles.sortByRow}>
+          <SortByColumn
+            sortBy={activeSortBy}
+            extraColumn={activeSortButton}
+            onChange={onChangeSort}
+          />
+        </div>
+        <ProductsTable
+          search={searchValue}
+          showFavorite={isActiveFavorite}
+          sortBy={activeSortBy}
+          extraColumn={activeSortButton}
+          activeMarket={activeMarket}
+        />
       </div>
-    </>
+      <ConnectToggleBtn />
+    </div>
   );
 };

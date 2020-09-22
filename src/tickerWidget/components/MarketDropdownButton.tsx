@@ -46,6 +46,7 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
     <div
       onMouseEnter={toggleDropdown(true)}
       onMouseLeave={toggleDropdown(false)}
+      className={styles.container}
     >
       <div
         role="tooltip"
@@ -55,13 +56,10 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
           ? values.find((v) => v === activeMarket.asset)
           : children}
       </div>
-      <div
-        className={`${styles.dropdown} ${
-          styles[showDropdown ? 'visible' : 'hidden']
-        }`}
-      >
+      <div className={`${styles.dropdown} ${!showDropdown && styles.hidden}`}>
         <MarketButton
           active={activeMarket.group === children}
+          variant="horizontalList"
           onClick={onSelectAllHandle}
         >
           &#9868; {children}
@@ -70,6 +68,7 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
           <MarketButton
             key={value}
             active={activeMarket.asset === value}
+            variant="horizontalList"
             onClick={onClickHandle(value)}
           >
             &#x2500; {value}

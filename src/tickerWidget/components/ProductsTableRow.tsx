@@ -1,6 +1,8 @@
 import React, { FC, useMemo } from 'react';
 import { FavoriteBtn } from './FavoriteBtn';
 
+import styles from './ProductsTableRow.module.css';
+
 interface IProps {
   symbol: string;
   price: string;
@@ -20,16 +22,16 @@ export const ProductsTableRow: FC<IProps> = ({
 }) => {
   const isPositive = useMemo(() => parseFloat(extra) >= 0, [extra]);
   return (
-    <div key={symbol} role="row" style={{ display: 'flex', padding: '1rem' }}>
-      <FavoriteBtn active={isFavorite} onClick={onFavorite} />
-      <div role="cell">{symbol}</div>
-      <div style={{ padding: '0 1rem' }}>{price}</div>
+    <div key={symbol} role="row" className={styles.container}>
+      <div className={styles.symbolGroup}>
+        <FavoriteBtn active={isFavorite} onClick={onFavorite} />
+        <div role="cell">{symbol}</div>
+      </div>
+      <div className={styles.price}>{price}</div>
       <div
-        style={{
-          color: `var(--${
-            showPercent ? (isPositive ? 'green' : 'orange') : 'white'
-          })`,
-        }}
+        className={`${styles.extraGroup} ${
+          styles[showPercent ? (isPositive ? 'green' : 'orange') : 'white']
+        }`}
       >
         {showPercent && isPositive ? '+' : ''}
         {extra}
