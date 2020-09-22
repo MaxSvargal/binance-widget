@@ -1,3 +1,7 @@
+.container {
+  flex: 1;
+}
+
 .container:hover .title {
   background: var(--foreground);
 }
@@ -19,6 +23,8 @@
   border: 0;
   cursor: default;
   min-height: 1.1em;
+  text-align: center;
+  transition: background .05s linear;
 }
 
 .titleActive {

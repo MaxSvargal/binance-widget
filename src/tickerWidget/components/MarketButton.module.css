@@ -5,6 +5,8 @@
   border: 0;
   flex: 1;
   cursor: pointer;
+  padding: 0;
+  transition: background .05s linear;
 }
 
 .marketButton:hover {

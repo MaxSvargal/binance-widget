@@ -64,6 +64,7 @@ export const MarketsMenu: FC<IMarketsMenuProps> = ({
       <MarketDropdownButton
         values={Object.keys(altsProducts)}
         activeMarket={activeMarket}
+        isActiveFavorite={isActiveFavorite}
         onSelect={onSelectDropdownMarket}
         onSelectAll={onSelectAllDropdownMarkets}
       >
@@ -72,6 +73,7 @@ export const MarketsMenu: FC<IMarketsMenuProps> = ({
       <MarketDropdownButton
         values={Object.keys(fiatProducts)}
         activeMarket={activeMarket}
+        isActiveFavorite={isActiveFavorite}
         onSelect={onSelectDropdownMarket}
         onSelectAll={onSelectAllDropdownMarkets}
       >

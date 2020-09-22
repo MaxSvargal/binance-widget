@@ -6,6 +6,7 @@ import styles from './MarketDropdownButton.module.css';
 
 interface IMarketDropdownButtonProps {
   activeMarket: IActiveMarketState;
+  isActiveFavorite: boolean;
   children: string;
   values: string[];
   onSelect: (value: string) => void;
@@ -14,6 +15,7 @@ interface IMarketDropdownButtonProps {
 
 export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
   activeMarket,
+  isActiveFavorite,
   children,
   values,
   onSelect,
@@ -37,10 +39,23 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
 
   const isActive = useMemo(
     () =>
-      activeMarket.group === children ||
-      (activeMarket?.asset && values.includes(activeMarket.asset)),
-    [activeMarket, values, children],
+      Boolean(
+        !isActiveFavorite &&
+          (activeMarket.group === children ||
+            (activeMarket?.asset && values.includes(activeMarket.asset))),
+      ),
+    [isActiveFavorite, activeMarket, values, children],
   );
+
+  const titleText = useMemo(
+    () =>
+      isActive && activeMarket.asset
+        ? values.find((v) => v === activeMarket.asset)
+        : children,
+    [isActive],
+  );
+
+  console.log({ isActive, isActiveFavorite });
 
   return (
     <div
@@ -52,13 +67,11 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
         role="tooltip"
         className={`${styles.title} ${isActive && styles.titleActive}`}
       >
-        {isActive && !activeMarket.group
-          ? values.find((v) => v === activeMarket.asset)
-          : children}
+        {titleText}
       </div>
       <div className={`${styles.dropdown} ${!showDropdown && styles.hidden}`}>
         <MarketButton
-          active={activeMarket.group === children}
+          active={isActive && activeMarket.group === children}
           variant="horizontalList"
           onClick={onSelectAllHandle}
         >
@@ -67,7 +80,7 @@ export const MarketDropdownButton: FC<IMarketDropdownButtonProps> = ({
         {values.map((value) => (
           <MarketButton
             key={value}
-            active={activeMarket.asset === value}
+            active={isActive && activeMarket.asset === value}
             variant="horizontalList"
             onClick={onClickHandle(value)}
           >
