@@ -1,9 +1,9 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { IActiveMarketState } from '..';
 
 import { productsContext } from '../contexts/productsContexts';
 import { useShowFavoriteState } from '../hooks/useShowFavoriteState';
 import { useStateSortBy } from '../hooks/useStateSortBy';
+import { IActiveMarketState } from '../interfaces/markets';
 
 import { getProducts } from '../repos/binanceRepo';
 

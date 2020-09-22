@@ -21,11 +21,6 @@ export enum SortByRadioGroup {
   Volume = 'Volume',
 }
 
-export type IActiveMarketState = Partial<{
-  asset: string;
-  group: string;
-}>;
-
 export const TickerWidget: FC = () => (
   <ProductsContextProvider>
     <TickerWidgetLayout defaultMarket={{ asset: 'BTC' }} />

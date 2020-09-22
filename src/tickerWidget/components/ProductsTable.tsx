@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 
-import { IActiveMarketState, SortBy, SortByRadioGroup } from '..';
+import { SortBy, SortByRadioGroup } from '../';
 import { productsContext } from '../contexts/productsContexts';
 import {
   getChangeRatio,
@@ -12,6 +12,7 @@ import { useProductsSearch } from '../hooks/useProductsSearch';
 import { useProductsSort } from '../hooks/useProductsSort';
 import { useSelectProductsByMarket } from '../hooks/useSelectProductsByMarket';
 import { useTicker } from '../hooks/useTicker';
+import { IActiveMarketState } from '../interfaces/markets';
 import { ProductsTableRow } from './ProductsTableRow';
 
 export interface IProductsTableProps {

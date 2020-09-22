@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IActiveMarketState } from '..';
+import { IActiveMarketState } from '../interfaces/markets';
 
 export const useShowFavoriteState = (
   activeMarket: IActiveMarketState,

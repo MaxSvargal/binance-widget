@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { IActiveMarketState } from '..';
+import { IActiveMarketState } from '../interfaces/markets';
 import { MarketButton } from './MarketButton';
 
 import styles from './MarketDropdownButton.module.css';
