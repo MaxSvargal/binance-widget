@@ -23,7 +23,6 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ProductsTableRow: FC<IProps> = ({
-  className,
   product,
   extraColumn,
   isFavorite,
@@ -33,11 +32,7 @@ export const ProductsTableRow: FC<IProps> = ({
   const ticker = useTickerSymbolState(product);
 
   return (
-    <div
-      role="row"
-      className={[styles.container, className].join(' ')} // TODO: Deprecate
-      {...rest}
-    >
+    <div role="row" className={styles.container} {...rest}>
       <ProductsTableCellSymbol
         isFavorite={isFavorite}
         onFavorite={onToggleFavorite}
