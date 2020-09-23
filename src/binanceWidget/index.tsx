@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { TickerWidgetLayout } from './components/TickerWidgetLayout';
+import { BinanceWidgetLayout } from './components/BinanceWidgetLayout';
 import { ProductsContextProvider } from './contexts/productsContexts';
 
 import { BinanceSocketRepo } from './repos/binanceSocketRepo';
@@ -21,9 +21,9 @@ export enum SortByRadioGroup {
   Volume = 'Volume',
 }
 
-export const TickerWidget: FC = () => (
+export const BinanceWidget: FC = () => (
   <ProductsContextProvider>
-    <TickerWidgetLayout defaultMarket={{ asset: 'BTC' }} />
+    <BinanceWidgetLayout defaultMarket={{ asset: 'BTC' }} />
   </ProductsContextProvider>
 );
 

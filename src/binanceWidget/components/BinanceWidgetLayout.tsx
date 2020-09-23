@@ -15,13 +15,13 @@ import { ProductsTable } from './productsTable/ProductsTable';
 import { SearchField } from './search/SearchField';
 import { SortRadioControls } from './sortRadioControls/SortRadioControls';
 
-import styles from './TickerWidgetLayout.module.css';
+import styles from './BinanceWidgetLayout.module.css';
 
 interface ITickerWidgetLayoutProps {
   defaultMarket: IActiveMarketState;
 }
 
-export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
+export const BinanceWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
   defaultMarket,
 }) => {
   const [, setProducts] = useContext(productsContext);

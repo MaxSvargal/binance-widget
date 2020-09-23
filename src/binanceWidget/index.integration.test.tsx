@@ -4,7 +4,7 @@ import { mocked } from 'ts-jest/utils';
 import { render, screen } from '@testing-library/react';
 import UserEvent from '@testing-library/user-event';
 
-import { TickerWidgetLayout } from './components/TickerWidgetLayout';
+import { BinanceWidgetLayout } from './components/BinanceWidgetLayout';
 import { ProductsContextProvider } from './contexts/productsContexts';
 
 import products from './fixtures/products.json';
@@ -32,7 +32,7 @@ describe('Ticker Widget', () => {
   const renderWidget = (products: IProduct[]) =>
     render(
       <ProductsContextProvider value={products}>
-        <TickerWidgetLayout defaultMarket={DEFAULT_MARKET} />
+        <BinanceWidgetLayout defaultMarket={DEFAULT_MARKET} />
       </ProductsContextProvider>,
     );
 
