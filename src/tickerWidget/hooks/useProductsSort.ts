@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { SortBy } from '../';
-import { getRatio } from '../helpers/productsFields';
+import { getRatio } from '../../shared/helpers/numbers';
 import { IProduct } from '../interfaces/products';
 
 const orderOf = <T extends string | number>(a: T, b: T): number =>

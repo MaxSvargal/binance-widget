@@ -41,13 +41,13 @@ describe('Ticker Widget', () => {
     mockedGetProducts.mockResolvedValueOnce(products);
 
     mockedOnMiniTickerShorten.mockClear();
-    mockedOnMiniTickerShorten.mockImplementationOnce((listener) =>
+    mockedOnMiniTickerShorten.mockImplementation((listener) =>
       listener(ticker),
     );
     setItemLocalStorageSpy.mockClear();
   });
 
-  it('show default market on load', () => {
+  it('on load show default market list', () => {
     renderWidget(products);
 
     expect(mockedGetProducts).toHaveBeenCalledTimes(1);
@@ -58,7 +58,17 @@ describe('Ticker Widget', () => {
     expect(screen.queryByText('TRX/XRP')).not.toBeInTheDocument();
   });
 
-  it('show products list on select one of ALTS markets', () => {
+  it('on receive websocket ticker event then update products', () => {
+    renderWidget(products);
+
+    expect(screen.getByText('0.00001136')).toBeInTheDocument();
+    expect(screen.getByText('+8.09%')).toBeInTheDocument();
+
+    expect(screen.getByText('0.034002')).toBeInTheDocument();
+    expect(screen.getByText('-2.25%')).toBeInTheDocument();
+  });
+
+  it('on select one of ALTS markets show products list', () => {
     renderWidget(products);
 
     UserEvent.hover(screen.getByRole('tooltip', { name: /ALTS/i }));
@@ -70,7 +80,7 @@ describe('Ticker Widget', () => {
     expect(screen.queryByText('TRX/XRP')).not.toBeInTheDocument();
   });
 
-  it('show products list on select all ALTS markets', () => {
+  it('on select all ALTS markets show products list', () => {
     renderWidget(products);
 
     UserEvent.hover(screen.getByRole('tooltip', { name: /ALTS/i }));
@@ -82,7 +92,7 @@ describe('Ticker Widget', () => {
     expect(screen.getByText('TRX/XRP')).toBeInTheDocument();
   });
 
-  it('show filtered list on search', async () => {
+  it('on search show filtered list', async () => {
     renderWidget(products);
 
     await UserEvent.type(screen.getByRole('searchbox'), 'xrp');
@@ -96,7 +106,7 @@ describe('Ticker Widget', () => {
     expect(screen.queryByText('BNB/BTC')).not.toBeInTheDocument();
   });
 
-  it('on click button clear search', async () => {
+  it('on click clear search button', async () => {
     renderWidget(products);
 
     await UserEvent.type(screen.getByRole('searchbox'), 'xrp');
@@ -136,6 +146,9 @@ describe('Ticker Widget', () => {
       'checked',
       true,
     );
+
+    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('BNB/BTC');
   });
 
   it('on sort by colum by name (pair)', () => {
@@ -239,19 +252,5 @@ describe('Ticker Widget', () => {
     UserEvent.click(screen.getByRole('button', { name: 'Favorite' }));
     expect(screen.getAllByRole('cell')[0]).toHaveTextContent('UMA/BTC');
     expect(screen.getAllByRole('cell')[1]).toHaveTextContent('TRX/XRP');
-  });
-
-  it('show default connected status', () => {
-    renderWidget(products);
-    UserEvent.click(screen.getByRole('button', { name: 'Connecting...' }));
-  });
-
-  it('on receive websocket ticker event then update products', () => {
-    renderWidget(products);
-
-    expect(screen.getByText('0.00001136')).toBeInTheDocument();
-    expect(screen.getByText('0.034002')).toBeInTheDocument();
-    expect(screen.getByText('+8.09%')).toBeInTheDocument();
-    expect(screen.getByText('-2.25%')).toBeInTheDocument();
   });
 });

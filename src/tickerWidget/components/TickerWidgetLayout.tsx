@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
+import { binanceSocketRepo } from '..';
 
 import { productsContext } from '../contexts/productsContexts';
 import { useShowFavoriteState } from '../hooks/useShowFavoriteState';
@@ -33,6 +34,9 @@ export const TickerWidgetLayout: FC<ITickerWidgetLayoutProps> = ({
         // setError(err) if needed
       });
   }, [setProducts]);
+
+  // Close websocket connection on unmount main component
+  useEffect(() => () => binanceSocketRepo.close(), []);
 
   const [activeMarket, setActiveMarket] = useState<IActiveMarketState>(
     defaultMarket,
