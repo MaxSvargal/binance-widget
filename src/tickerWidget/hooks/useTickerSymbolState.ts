@@ -5,7 +5,7 @@ import { IMiniTickerShorten } from '../interfaces/ticker';
 
 export const useTickerSymbolState = (product: IProduct): IMiniTickerShorten => {
   const [value, setValue] = useState<IMiniTickerShorten>({
-    // TODO: Refactor, use model instead
+    // TODO: Refactor this, use model with friendly names instead
     s: product.s,
     c: product.c.toString(),
     o: product.o.toString(),
