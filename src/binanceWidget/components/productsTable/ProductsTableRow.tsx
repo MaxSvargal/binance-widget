@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from 'react';
+import React, { FC } from 'react';
 
 import { SortByRadioGroup } from '../..';
 import { useTickerSymbolState } from '../../hooks/useTickerSymbolState';
@@ -15,7 +15,7 @@ import {
 
 import styles from './ProductsTableRow.module.css';
 
-interface IProps extends HTMLAttributes<HTMLDivElement> {
+interface IProps {
   product: IProduct;
   isFavorite: boolean;
   extraColumn: SortByRadioGroup;
@@ -27,12 +27,11 @@ export const ProductsTableRow: FC<IProps> = ({
   extraColumn,
   isFavorite,
   onToggleFavorite,
-  ...rest
 }) => {
   const ticker = useTickerSymbolState(product);
 
   return (
-    <div role="row" className={styles.container} {...rest}>
+    <div role="row" className={styles.container}>
       <ProductsTableCellSymbol
         isFavorite={isFavorite}
         onFavorite={onToggleFavorite}
