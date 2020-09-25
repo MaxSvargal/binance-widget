@@ -54,10 +54,16 @@ export class WebSocketRepo extends EventEmitter {
     }
   }
 
-  public onChangeStatus(listener: (s: WebsocketReadyState) => void): void {
-    this.on('open', () => listener(this.status));
-    this.on('error', () => listener(this.status));
-    this.on('close', () => listener(this.status));
+  public onChangeStatus(
+    listener: (s: WebsocketReadyState) => void,
+  ): () => void {
+    const disposers = [
+      this.on('open', () => listener(this.status)),
+      this.on('error', () => listener(this.status)),
+      this.on('close', () => listener(this.status)),
+    ];
+
+    return () => disposers.forEach((disposer) => disposer());
   }
 
   public close(): void {
