@@ -30,9 +30,3 @@ I would love to work with you as a front-end engineer because I am good in it an
 # Test assignment hints
 When I reading the test overview, I realized "widget" that something lightweight, so React and it's hooks are all that I need for now. But in production I prefer to use solid state managers like `mobx-state-tree` or `mobx-keystone`, so using one of them makes many things much easier. And also  `style-components` or `emotion` or other css-in-js libraries can help a lot in work with TypeScript.
 I didn't use unit tests here because these components wouldn't be shared. Integration testing of front-end is preferred as a best practice.
-
-# Contacts
-- Email: maxsvargal@gmail.com
-- GitHub: https://github.com/MaxSvargal
-- Telegram: @maxsvargal
-- Skype: @maxsvargal
